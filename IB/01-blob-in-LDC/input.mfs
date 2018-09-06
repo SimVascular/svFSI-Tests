@@ -1,0 +1,115 @@
+#----------------------------------------------------------------
+# General simulation parameters
+Number of spatial dimensions: 2
+Number of time steps: 500
+Time step size: 0.02
+Continue previous simulation: 0
+Overwrite restart file: 0
+Save results in a folder: 1
+Increment in saving restart files: 500
+Name prefix of saved files: result
+Increment in saving files: 1
+Start saving after time step: 1
+Save averaged results: 0
+Spectral radius of infinite time step: 0.20
+Searched file name to trigger stop: STOP_SIM
+Verbose: 1
+Warning: 0
+Debug: 0
+
+#----------------------------------------------------------------
+# Mesh data
+Add mesh: LDC {
+   Mesh file path (vtu): ./mesh/cavity/h64/mesh-complete.mesh.vtu
+   Add face: top_wall {
+      Face file path (vtp): ./mesh/cavity/h64/mesh-surfaces/top_wall.vtp
+   }
+   Add face: bottom_wall {
+      Face file path (vtp): ./mesh/cavity/h64/mesh-surfaces/bottom_wall.vtp
+   }
+   Add face: side_walls {
+      Face file path (vtp): ./mesh/cavity/h64/mesh-surfaces/side_walls.vtp
+   }
+}
+
+Add IB: ball {
+   Mesh file path (vtu): ./mesh/ball/h0.01/mesh-complete.mesh.vtu
+   Add face: wall {
+      Face file path (vtp): ./mesh/ball/h0.01/mesh-surfaces/wall.vtp
+   }
+   Domain (IB): 0
+   Mesh edge size: 0.01
+}
+
+#----------------------------------------------------------------
+# Set IB settings
+IB settings: 0 {
+   Method: IFEM
+   Use feedback forcing: f
+   Use finite cell integration: f
+}
+
+#----------------------------------------------------------------
+# Equations
+Add equation: fluid {
+   Coupled: 1
+   Min iterations: 1
+   Max iterations: 10
+   Tolerance: 1e-3
+   Residual dB reduction: -40
+   
+   Density: 1.0
+   Viscosity: 0.01
+   Backflow stabilization coefficient: 0.3
+   
+   Output: Spatial {
+      Velocity: t
+      Pressure: t
+      Vorticity: t
+   }
+   
+   LS type: GMRES
+   {
+      Max iterations: 10
+      Krylov space dimension: 50
+      Tolerance: 1D-3
+   }
+   
+   Add BC: top_wall {
+      Type: Dir
+      Time dependence: General
+      Temporal and spatial values file path: ./mesh/cavity/h64/lid_vel.txt
+   }
+   
+   Add BC: side_walls {
+      Type: Dir
+      Value: 0.0
+   }
+   
+   Add BC: bottom_wall {
+      Type: Dir
+      Value: 0.0
+   }
+
+#-----------------------------#
+### IB eqn & dmn parameters ###
+#-----------------------------#
+
+   Domain (IB): 0 {
+      Equation: struct
+      Constitutive model: nHK
+      Dilational penalty model: quad
+      Penalty constant: 0.0
+      Density: 1.0
+      Elasticity modulus: 29.8
+      Poisson ratio: 0.49
+   }
+
+   Output (IB): Spatial {
+      Velocity: t
+      Pressure: t
+      Displacement: t
+      Acceleration: t
+   }
+}
+

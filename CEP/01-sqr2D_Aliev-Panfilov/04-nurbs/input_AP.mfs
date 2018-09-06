@@ -1,0 +1,112 @@
+#----------------------------------------------------------------# General simulation parameters
+Number of spatial dimensions: 2
+Number of time steps: 727
+Time step size: 1.0
+Continue previous simulation: 0
+Overwrite restart file: 1
+Save results in a folder: 1
+Increment in saving restart files: 100
+Name prefix of saved files: result
+Increment in saving files: 1
+Start saving after time step: 1
+Save averaged results: 0
+Spectral radius of infinite time step: 0.20
+Searched file name to trigger stop: STOP_SIM
+Verbose: 1
+Warning: 0
+Debug: 0
+
+#----------------------------------------------------------------
+# Mesh data
+Add mesh: msh {
+   NURBS data file path:  ../mesh/nurbs/2Dsqr_NURBS_C1.msh
+   Set direction: 1 {
+      Number of knot insertion:  49
+      Inserted knots repetition: 1
+      Start face name: left
+      End face name: right
+   }
+   Set direction: 2 {
+      Number of knot insertion:  49
+      Inserted knots repetition: 1
+      Start face name: bottom
+      End face name: top
+   }
+   Mesh scale factor: 100.0
+   Domain file path: ../mesh/nurbs/domain_NURBS_C1.dat
+}
+
+#----------------------------------------------------------------
+# Equations
+Add equation: CEP {
+   Coupled: 1
+   Min iterations: 1
+   Max iterations: 2
+   Tolerance: 1e-6
+   Residual dB reduction: -80.0
+   
+   Domain: 1 {
+      Electrophysiology model: AP
+      State variables: 2
+      Conductivity (iso): 1.0
+#     ODE solver: RK4 #FE
+      ODE solver: CN2 {
+         Maximum iterations: 5
+         Absolute tolerance: 1D-8
+         Relative tolerance: 1D-4
+      }
+   }
+
+   Domain: 2 {
+      Electrophysiology model: AP
+      State variables: 2
+      Conductivity (iso): 1.0
+      Stimulus: Istim {
+         Amplitude: 10.0
+         Start time: 0.0
+         Duration: 10.0
+         Period: 1000.0
+      }
+      ODE solver: CN2 {
+         Maximum iterations: 5
+         Absolute tolerance: 1D-8
+         Relative tolerance: 1D-4
+      }
+   }
+
+   Output: Spatial {
+      Action_potential: t
+   }
+   
+   LS type: GMRES
+   {
+      Max iterations:      100
+      Tolerance:           1D-6
+      Krylov space dimension: 50
+   }
+   
+   Add BC: bottom {
+      Type: Neu
+      Time dependence: Steady
+      Value: 0.0
+   }
+   
+   Add BC: top {
+      Type: Neu
+      Time dependence: Steady
+      Value: 0.0
+   }
+   
+   Add BC: left {
+      Type: Neu
+      Time dependence: Steady
+      Value: 0.0
+   }
+   
+   Add BC: right {
+      Type: Neu
+      Time dependence: Steady
+      Value: 0.0
+   }
+}
+

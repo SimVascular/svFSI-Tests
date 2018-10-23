@@ -1,12 +1,12 @@
 #----------------------------------------------------------------
 # General simulation parameters
 Number of spatial dimensions: 2
-Number of time steps: 1000
-Time step size: 0.005
+Number of time steps: 10000
+Time step size: 0.001
 Continue previous simulation: 0
 Overwrite restart file: 0
 Save results in a folder: 1
-Increment in saving restart files: 500
+Increment in saving restart files: 1000
 Name prefix of saved files: result
 Increment in saving files: 10
 Start saving after time step: 1
@@ -35,13 +35,13 @@ Add mesh: channel {
    }
 }
 
-Add IB: ball {
-   Mesh file path (vtu): ./mesh/ball/mesh-complete.mesh.vtu
+Add IB: disk {
+   Mesh file path (vtu): ./mesh/disk/mesh-complete.mesh.vtu
    Add face: wall {
-      Face file path (vtp): ./mesh/ball/mesh-surfaces/cyl_wall.vtp
+      Face file path (vtp): ./mesh/disk/mesh-surfaces/wall.vtp
    }
    Domain (IB): 0
-   Mesh edge size: 0.015
+   Mesh edge size: 0.03
 }
 
 #----------------------------------------------------------------
@@ -57,25 +57,40 @@ IB settings: 0 {
 Add equation: fluid {
    Coupled: 1
    Min iterations: 1
-   Max iterations: 10
-   Tolerance: 1e-3
+   Max iterations: 5
+   Tolerance: 1D-6
    Residual dB reduction: -40
    
    Density: 1.0
-   Viscosity: 1.0
-   Force_X: 980.0
-
-   Backflow stabilization coefficient: 0.3
+   Viscosity: 5.0
+   Force_X: 981.0
    
    Output: Spatial {
       Velocity: t
-      Pressure: t
       Vorticity: t
    }
    
-   LS type: BICG {
-      Max iterations: 500
-      Tolerance:           1D-3
+   LS type: GMRES
+   {
+      Preconditioner: Trilinos-ILUT
+      Max iterations: 10
+      Krylov space dimension: 50
+      Tolerance: 1D-6
+   }
+
+   Add BC: x2 {
+      Type: Dir
+      Value: 0.0
+   }
+   
+   Add BC: y1 {
+      Type: Dir
+      Value: 0.0
+   }
+   
+   Add BC: y2 {
+      Type: Dir
+      Value: 0.0
    }
 
 #-----------------------------#
@@ -86,11 +101,16 @@ Add equation: fluid {
       Equation: struct
       Constitutive model: nHK
       Dilational penalty model: quad
-      Penalty constant: 0.0
-      Density: 3.0
-      Elasticity modulus: 10000.0
-      Poisson ratio: 0.3
-      Force_X: 980.0
+      Penalty value: 0.0
+      Density: 1.25
+      Elasticity modulus: 99979.0
+      Poisson ratio: 0.49
+      Force_X: 981.0
+   }
+
+   Output (IB): Spatial {
+      Velocity: t
+      Displacement: t
    }
 }
 

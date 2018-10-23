@@ -1,14 +1,14 @@
 #----------------------------------------------------------------
 # General simulation parameters
 Number of spatial dimensions: 2
-Number of time steps: 500
-Time step size: 0.02
+Number of time steps: 5000
+Time step size: 0.005
 Continue previous simulation: 0
 Overwrite restart file: 0
 Save results in a folder: 1
 Increment in saving restart files: 500
 Name prefix of saved files: result
-Increment in saving files: 1
+Increment in saving files: 10
 Start saving after time step: 1
 Save averaged results: 0
 Spectral radius of infinite time step: 0.20
@@ -20,15 +20,15 @@ Debug: 0
 #----------------------------------------------------------------
 # Mesh data
 Add mesh: LDC {
-   Mesh file path (vtu): ./mesh/cavity/h64/mesh-complete.mesh.vtu
+   Mesh file path (vtu): ./mesh/cavity/tri/mesh-complete.mesh.vtu
    Add face: top_wall {
-      Face file path (vtp): ./mesh/cavity/h64/mesh-surfaces/top_wall.vtp
+      Face file path (vtp): ./mesh/cavity/tri/mesh-surfaces/top_wall.vtp
    }
    Add face: bottom_wall {
-      Face file path (vtp): ./mesh/cavity/h64/mesh-surfaces/bottom_wall.vtp
+      Face file path (vtp): ./mesh/cavity/tri/mesh-surfaces/bottom_wall.vtp
    }
    Add face: side_walls {
-      Face file path (vtp): ./mesh/cavity/h64/mesh-surfaces/side_walls.vtp
+      Face file path (vtp): ./mesh/cavity/tri/mesh-surfaces/side_walls.vtp
    }
 }
 
@@ -64,8 +64,6 @@ Add equation: fluid {
    
    Output: Spatial {
       Velocity: t
-      Pressure: t
-      Vorticity: t
    }
    
    LS type: GMRES
@@ -78,7 +76,7 @@ Add equation: fluid {
    Add BC: top_wall {
       Type: Dir
       Time dependence: General
-      Temporal and spatial values file path: ./mesh/cavity/h64/lid_vel.txt
+      Temporal and spatial values file path: ./mesh/cavity/tri/lid_vel.txt
    }
    
    Add BC: side_walls {
@@ -99,7 +97,7 @@ Add equation: fluid {
       Equation: struct
       Constitutive model: nHK
       Dilational penalty model: quad
-      Penalty constant: 0.0
+      Penalty value: 0.0
       Density: 1.0
       Elasticity modulus: 29.8
       Poisson ratio: 0.49
@@ -107,9 +105,7 @@ Add equation: fluid {
 
    Output (IB): Spatial {
       Velocity: t
-      Pressure: t
       Displacement: t
-      Acceleration: t
    }
 }
 

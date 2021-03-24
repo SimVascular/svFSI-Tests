@@ -1,0 +1,132 @@
+#----------------------------------------------------------------
+# General simulation parameters
+
+Continue previous simulation: 0
+Number of spatial dimensions: 3
+Number of time steps: 10000
+Time step size: 1e-4
+Spectral radius of infinite time step: 0.50
+Searched file name to trigger stop: STOP_SIM
+
+Save results to VTK format: 1
+Name prefix of saved VTK files: result
+Increment in saving VTK files: 100
+Start saving after time step: 1
+
+Increment in saving restart files: 200
+Convert BIN to VTK format: 0
+
+Verbose: 1
+Warning: 1
+Debug: 0
+
+#----------------------------------------------------------------
+# Mesh data
+Add mesh: msh {
+   Mesh file path:    mesh/mesh-complete.mesh.vtu
+   Add face: X0 {
+      Face file path: mesh/mesh-surfaces/X0.vtp
+   }
+   Add face: X1s {
+      Face file path: mesh/mesh-surfaces/X1sym.vtp
+   }
+   Add face: Y0 {
+      Face file path: mesh/mesh-surfaces/Y0.vtp
+   }
+   Add face: Y1s {
+      Face file path: mesh/mesh-surfaces/Y1sym.vtp
+   }
+   Add face: Z0 {
+      Face file path: mesh/mesh-surfaces/Z0.vtp
+   }
+   Add face: Z1 {
+      Face file path: mesh/mesh-surfaces/Z1.vtp
+   }
+   Fiber direction: (-0.76582, 0.0, 0.643055)
+   Fiber direction: ( 0.76582, 0.0, 0.643055)
+}
+
+#----------------------------------------------------------------
+# Equations
+Add equation: ustruct {
+   Coupled: 1
+   Min iterations: 3
+   Max iterations: 10
+   Tolerance: 1e-6
+   Use Taylor-Hood type basis: f
+
+   Constitutive model: HGO {
+      a4: 9.966e5
+      b4: 524.6
+      a6: 9.966e5
+      b6: 524.6
+      kappa: 0.226
+   }
+
+   Density: 1e-3
+   Elasticity modulus: 22920.0  # used for computing tauM/tauC
+
+   Poisson ratio: 0.5
+   Momentum stabilization coefficient: 1e-3
+   Continuity stabilization coefficient: 1e-3
+
+   Output: Spatial {
+      Displacement: t
+      Velocity: t
+      Pressure: t
+      Stress: t
+      VonMises_stress: t
+      Fiber_direction: t
+      Fiber_alignment: t
+      Jacobian: t
+   }
+
+   LS type: GMRES
+   {
+      Preconditioner:      Trilinos-ILUT
+      Tolerance:           1D-6
+      Max iterations:      100
+      Krylov space dimension: 50
+   }
+
+   Add BC: X1s {
+      Type: Dir
+      Value: 0.0
+      Effective direction: (1, 0, 0)
+      Impose on state variable integral: t
+      Zero out perimeter: f
+   }
+
+   Add BC: Y1s {
+      Type: Dir
+      Value: 0.0
+      Effective direction: (0, 1, 0)
+      Impose on state variable integral: t
+      Zero out perimeter: f
+   }
+
+   Add BC: Z0 {
+      Type: Dir
+      Value: 0.0
+      Effective direction: (0, 0, 1)
+      Impose on state variable integral: t
+      Zero out perimeter: f
+   }
+
+   Add BC: Z1 {
+      Type: Dir
+      Value: 0.0
+      Effective direction: (1, 1, 0)
+      Impose on state variable integral: t
+      Zero out perimeter: f
+   }
+
+   Add BC: Z1 {
+      Type: Neu
+      Time dependence: Unsteady
+      Temporal values file path: load.dat
+      Ramp function: t
+      Undeforming Neu face: t
+   }
+}
+

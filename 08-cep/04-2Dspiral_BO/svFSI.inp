@@ -1,0 +1,91 @@
+#----------------------------------------------------------------
+# General simulation parameters
+
+Continue previous simulation: f
+Number of spatial dimensions: 2
+Number of time steps: 10000
+Time step size: 0.1
+Spectral radius of infinite time step: 0.50
+Searched file name to trigger stop: STOP_SIM
+
+Save results to VTK format: 1
+Name prefix of saved VTK files: result
+Increment in saving VTK files: 10
+Start saving after time step: 1
+
+Increment in saving restart files: 10
+Convert BIN to VTK format: 0
+
+Verbose: 1
+Warning: 1
+Debug: 0
+
+#----------------------------------------------------------------
+# Mesh data
+Add mesh: msh {
+   Mesh file path:    mesh/250mm_h0.25/mesh-complete.mesh.vtu
+   Add face: X0 {
+      Face file path: mesh/250mm_h0.25/mesh-surfaces/X0.vtp
+   }
+   Add face: X1 {
+      Face file path: mesh/250mm_h0.25/mesh-surfaces/X1.vtp
+   }
+   Add face: Y0 {
+      Face file path: mesh/250mm_h0.25/mesh-surfaces/Y0.vtp
+   }
+   Add face: Y1 {
+      Face file path: mesh/250mm_h0.25/mesh-surfaces/Y1.vtp
+   }
+   Domain file path: mesh/250mm_h0.25/spiral_domain_info.dat
+}
+
+#----------------------------------------------------------------
+# Equations
+Add equation: CEP {
+   Coupled: 1
+   Min iterations: 1
+   Max iterations: 5
+   Tolerance: 1e-4
+
+   Domain: 1 {
+      Electrophysiology model: BO
+      Conductivity (iso): 0.1171
+      ODE solver: RK
+   }
+
+   Domain: 2 {
+      Electrophysiology model: BO
+      Conductivity (iso): 0.1171
+      Stimulus: Istim {
+         Amplitude: -52.0
+         Start time: 0.0
+         Duration: 2.0
+         Cycle length: 100000.0
+      }
+      ODE solver: RK
+   }
+
+   Domain: 3 {
+      Electrophysiology model: BO
+      Conductivity (iso): 0.1171
+      Stimulus: Istim {
+         Amplitude: -52.0
+         Start time: 440.0
+         Duration: 5.0
+         Cycle length: 100000.0
+      }
+      ODE solver: RK
+   }
+
+   Output: Spatial {
+      Action_potential: t
+   }
+
+   LS type: GMRES
+   {
+      Max iterations:      100
+      Tolerance:           1D-6
+      Krylov space dimension: 50
+   }
+}
+

@@ -1,0 +1,85 @@
+#----------------------------------------------------------------
+# General simulation parameters
+
+Continue previous simulation: 0
+Number of spatial dimensions: 3
+Number of time steps: 100
+Time step size: 0.01
+Spectral radius of infinite time step: 0.50
+Searched file name to trigger stop: STOP_SIM
+
+Save results to VTK format: 1
+Name prefix of saved VTK files: result
+Increment in saving VTK files: 10
+Start saving after time step: 1
+
+Increment in saving restart files: 100
+Convert BIN to VTK format: 0
+
+Verbose: 1
+Warning: 0
+Debug: 0
+
+#----------------------------------------------------------------
+# Mesh data
+Add mesh: msh {
+   Mesh file path:    ../../mesh/02-hex8/N008/mesh-complete.mesh.vtu
+   Add face: left {
+      Face file path: ../../mesh/02-hex8/N008/mesh-surfaces/left.vtp
+   }
+   Add face: right {
+      Face file path: ../../mesh/02-hex8/N008/mesh-surfaces/right.vtp
+   }
+   Add face: bottom {
+      Face file path: ../../mesh/02-hex8/N008/mesh-surfaces/bottom.vtp
+   }
+   Add face: top {
+      Face file path: ../../mesh/02-hex8/N008/mesh-surfaces/top.vtp
+   }
+   Add face: front {
+      Face file path: ../../mesh/02-hex8/N008/mesh-surfaces/front.vtp
+   }
+   Add face: back {
+      Face file path: ../../mesh/02-hex8/N008/mesh-surfaces/back.vtp
+   }
+}
+
+#----------------------------------------------------------------
+# Equations
+Add equation: lElas {
+   Coupled: 1
+   Min iterations: 1
+   Max iterations: 10
+   Tolerance: 1e-3
+
+   Density: 1e-3
+   Elasticity modulus: 2.1e11
+   Poisson ratio: 0.3
+
+   Output: Spatial {
+      Displacement: t
+      VonMises_stress : t
+      Jacobian: t
+   }
+
+   LS type: GMRES
+   {
+      Preconditioner:      Trilinos-ILUT
+      Tolerance:           1D-3
+      Max iterations:      100
+      Krylov space dimension: 50
+   }
+
+   Add BC: left {
+      Type: Dir
+      Value: 0.0
+   }
+
+   Add BC: right {
+      Type: Traction
+      Time dependence: Unsteady
+      Temporal values file path: ../../load.dat
+      Ramp function: t
+   }
+}
+

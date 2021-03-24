@@ -1,0 +1,112 @@
+#----------------------------------------------------------------
+# General simulation parameters
+
+Continue previous simulation: 0
+Number of spatial dimensions: 2
+Number of time steps: 500
+Time step size: 0.05
+Spectral radius of infinite time step: 0.50
+Searched file name to trigger stop: STOP_SIM
+
+Save results to VTK format: 1
+Name prefix of saved VTK files: result
+Increment in saving VTK files: 100
+Start saving after time step: 1
+
+Increment in saving restart files: 100
+Convert BIN to VTK format: 0
+
+Verbose: 1
+Warning: 1
+Debug: 0
+
+#----------------------------------------------------------------
+# Mesh data
+Add mesh: msh {
+   Mesh file path:    ../../mesh/nonunif-quad_N64/mesh-complete.mesh.vtu
+   Add face: left {
+      Face file path: ../../mesh/nonunif-quad_N64/mesh-surfaces/left.vtp
+   }
+   Add face: right {
+      Face file path: ../../mesh/nonunif-quad_N64/mesh-surfaces/right.vtp
+   }
+   Add face: bottom {
+      Face file path: ../../mesh/nonunif-quad_N64/mesh-surfaces/bottom.vtp
+   }
+   Add face: top {
+      Face file path: ../../mesh/nonunif-quad_N64/mesh-surfaces/top.vtp
+   }
+}
+
+#----------------------------------------------------------------
+# Equations
+Add equation: fluid {
+   Coupled: 1
+   Min iterations: 1
+   Max iterations: 10
+   Tolerance: 1e-6
+
+   Density: 1.0
+   Viscosity: constant {Value: 0.001}
+   Backflow stabilization coefficient: 0.1
+
+   Output: Spatial {
+      Velocity: t
+      Pressure: t
+      Vorticity: t
+      Divergence: t
+   }
+
+   Output: Volume_integral {
+      Divergence: t
+   }
+
+   LS type: GMRES
+   {
+      Preconditioner: Trilinos-ILUT
+      Tolerance: 1e-6
+      Max iterations: 100
+      Krylov space dimension: 50
+   }
+
+   #LS type: NS {
+   #   Tolerance: 1e-6
+   #   Max iterations: 100
+   #   Krylov space dimension: 50
+
+   #   NS-GM max iterations: 5
+   #   NS-CG max iterations: 500
+   #   NS-GM tolerance: 1e-6
+   #   NS-CG tolerance: 1e-6
+   #}
+
+   Add BC: left {
+      Type: Dir
+      Value: 0.0
+   }
+
+   Add BC: right {
+      Type: Dir
+      Value: 0.0
+   }
+
+   Add BC: bottom {
+      Type: Dir
+      Value: 0.0
+   }
+
+   Add BC: top {
+      Type: Dir
+      Value: 1.0
+      Effective direction: (1, 0)
+      Zero out perimeter: f
+   }
+
+   Add BC: top {
+      Type: Dir
+      Value: 0.0
+      Effective direction: (0, 1)
+      Zero out perimeter: f
+   }
+}
+

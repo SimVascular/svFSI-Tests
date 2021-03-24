@@ -1,0 +1,78 @@
+#----------------------------------------------------------------
+# General simulation parameters
+
+Continue previous simulation: f
+Number of spatial dimensions: 2
+Number of time steps: 20
+Time step size: 0.01
+Spectral radius of infinite time step: 0.50
+Searched file name to trigger stop: STOP_SIM
+
+Save results to VTK format: 1
+Name prefix of saved VTK files: result
+Increment in saving VTK files: 1
+Start saving after time step: 1
+
+Increment in saving restart files: 20
+Convert BIN to VTK format: 0
+
+Verbose: 1
+Warning: 1
+Debug: 0
+
+#----------------------------------------------------------------
+# Mesh data
+Add mesh: msh {
+   Mesh file path: mesh/mesh-complete.mesh.vtu
+   Add face: left {
+      Face file path: mesh/mesh-surfaces/left.vtp
+   }
+   Add face: right {
+      Face file path: mesh/mesh-surfaces/right.vtp
+   }
+   Add face: bottom {
+      Face file path: mesh/mesh-surfaces/bottom.vtp
+   }
+   Add face: top {
+      Face file path: mesh/mesh-surfaces/top.vtp
+   }
+}
+
+#----------------------------------------------------------------
+# Equations
+Add equation: heatS {
+   Coupled: 1
+   Min iterations: 1
+   Max iterations: 5
+   Tolerance: 1e-6
+
+   Conductivity: 1.0
+   Source term: 0.0
+   Density: 0.0
+
+   Output: Spatial {
+      Temperature: t
+      Heat_flux: t
+   }
+
+   LS type: GMRES
+   {
+      #Preconditioner: Trilinos-ILUT
+      Preconditioner: FSILS
+      Max iterations: 100
+      Tolerance:      1D-6
+      Krylov space dimension: 50
+   }
+
+   Add BC: left {
+      Type: Dir
+      Value: 10.0
+      Zero out perimeter: f
+   }
+
+   Add BC: right {
+      Type: Dir
+      Value: 0.0
+      Zero out perimeter: f
+   }
+}

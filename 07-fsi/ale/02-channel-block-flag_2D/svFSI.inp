@@ -1,0 +1,180 @@
+#----------------------------------------------------------------
+# General simulation parameters
+
+Continue previous simulation: 0
+Number of spatial dimensions: 2
+Number of time steps: 10000
+Time step size: 1e-3
+Spectral radius of infinite time step: 0.50
+Searched file name to trigger stop: STOP_SIM
+
+Save results to VTK format: 1
+Name prefix of saved VTK files: result
+Increment in saving VTK files: 10
+Start saving after time step: 1
+
+Increment in saving restart files: 10
+Convert BIN to VTK format: 0
+
+Verbose: 1
+Warning: 0
+Debug: 0
+
+#----------------------------------------------------------------
+# Mesh data
+Add mesh: lumen {
+   Mesh file path: mesh/channel_block/Q2_h0.02/mesh-complete.mesh.vtu
+   Add face: inlet {
+      Face file path: mesh/channel_block/Q2_h0.02/mesh-surfaces/inlet.vtp
+   }
+   Add face: outlet {
+      Face file path: mesh/channel_block/Q2_h0.02/mesh-surfaces/outlet.vtp
+   }
+   Add face: top_wall {
+      Face file path: mesh/channel_block/Q2_h0.02/mesh-surfaces/top_wall.vtp
+   }
+   Add face: bottom_wall {
+      Face file path: mesh/channel_block/Q2_h0.02/mesh-surfaces/bottom_wall.vtp
+   }
+   Add face: sqr_wall {
+      Face file path: mesh/channel_block/Q2_h0.02/mesh-surfaces/sqr_wall.vtp
+   }
+   Add face: lumen_flag_int {
+      Face file path: mesh/channel_block/Q2_h0.02/mesh-surfaces/lumen_flag_int.vtp
+   }
+   Domain: 0
+}
+
+Add mesh: flag {
+   Mesh file path: mesh/flag/Q2_h0.03/mesh-complete.mesh.vtu
+   Add face: flag_fixed {
+      Face file path: mesh/flag/Q2_h0.03/mesh-surfaces/flag_fixed.vtp
+   }
+   Add face: wall_flag_int {
+      Face file path: mesh/flag/Q2_h0.03/mesh-surfaces/wall_flag_int.vtp
+   }
+   Domain: 1
+}
+
+#----------------------------------------------------------------
+# Projections
+Add projection: wall_flag_int {
+   Project from face: lumen_flag_int
+}
+
+#----------------------------------------------------------------
+# Equations
+Add equation: FSI {
+   Coupled: 1
+   Min iterations: 3
+   Max iterations: 10
+   Tolerance: 1e-6
+
+   Domain: 0 {
+      Equation: fluid
+      Density: 1.18e-3
+      Viscosity: Constant {Value: 1.82e-4}
+      Backflow stabilization coefficient: 0.2
+   }
+
+   Domain: 1 {
+      Equation: struct  #vms_struct
+      Constitutive model: nHK
+      Dilational penalty model: M94
+      Density: 0.1
+      Elasticity modulus: 2.5e6
+      Poisson ratio: 0.35
+
+      ##### For vms_struct Eq.
+      ## Momentum stabilization coefficient: 0.001
+      ## Continuity stabilization coefficient: 0.0
+   }
+
+   LS type: GMRES {
+      Preconditioner: Trilinos-ILUT
+      Tolerance: 1e-6
+      Max iterations: 100
+      Krylov space dimension: 50
+   }
+
+   Output: Spatial {
+      Displacement: t
+      Velocity: t
+      Pressure: t
+      Vorticity: t
+   }
+
+   Output: Alias {
+      Displacement: FS_Displacement
+   }
+
+   Add BC: inlet {
+      Type: Dir
+      Value: -51.3
+      Zero out perimeter: f
+   }
+
+   Add BC: top_wall {
+      Type: Dir
+      Value: 0.0
+      Zero out perimeter: f
+      Effective direction: (0, 1)
+   }
+
+   Add BC: bottom_wall {
+      Type: Dir
+      Value: 0.0
+      Zero out perimeter: f
+      Effective direction: (0, 1)
+   }
+
+   Add BC: sqr_wall {
+      Type: Dir
+      Value: 0.0
+   }
+
+   Add BC: flag_fixed {
+      Type: Dir
+      Value: 0.0
+      Impose on state variable integral: t
+   }
+}
+
+Add equation: mesh {
+   Coupled: 1
+   Min iterations: 1
+   Max iterations: 5
+   Tolerance: 1e-4
+   Poisson ratio: 0.3
+
+   LS type: CG {
+      Tolerance: 1e-4
+   }
+
+   Output: Spatial {
+      Displacement: t
+   }
+
+   Add BC: outlet {
+      Type: Dir
+      Value: 0.0
+   }
+
+   Add BC: top_wall {
+      Type: Dir
+      Value: 0.0
+      Effective direction: (0, 1)
+   }
+
+   Add BC: bottom_wall {
+      Type: Dir
+      Value: 0.0
+      Effective direction: (0, 1)
+   }
+
+   Add BC: sqr_wall {
+      Type: Dir
+      Value: 0.0
+   }
+}
+

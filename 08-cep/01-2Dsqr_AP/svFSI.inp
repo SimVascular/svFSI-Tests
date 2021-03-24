@@ -1,0 +1,78 @@
+#----------------------------------------------------------------
+# General simulation parameters
+
+Continue previous simulation: f
+Number of spatial dimensions: 2
+Number of time steps: 727
+Time step size: 1.0
+Spectral radius of infinite time step: 0.50
+Searched file name to trigger stop: STOP_SIM
+
+Save results to VTK format: 1
+Name prefix of saved VTK files: result
+Increment in saving VTK files: 1
+Start saving after time step: 1
+
+Increment in saving restart files: 1
+Convert BIN to VTK format: 0
+
+Verbose: 1
+Warning: 1
+Debug: 0
+
+#----------------------------------------------------------------
+# Mesh data
+Add mesh: msh {
+   Mesh file path:    mesh/h0.25/mesh-complete.mesh.vtu
+   Add face: bottom {
+      Face file path: mesh/h0.25/mesh-surfaces/bottom.vtp
+   }
+   Add face: top {
+      Face file path: mesh/h0.25/mesh-surfaces/top.vtp
+   }
+   Add face: left {
+      Face file path: mesh/h0.25/mesh-surfaces/left.vtp
+   }
+   Add face: right {
+      Face file path: mesh/h0.25/mesh-surfaces/right.vtp
+   }
+   Domain file path: mesh/h0.25/domain_info.dat
+}
+
+#----------------------------------------------------------------
+# Equations
+Add equation: CEP {
+   Coupled: 1
+   Min iterations: 1
+   Max iterations: 4
+   Tolerance: 1e-4
+
+   Domain: 1 {
+      Electrophysiology model: AP
+      Conductivity (iso): 1.0
+      ODE solver: Euler
+   }
+
+   Domain: 2 {
+      Electrophysiology model: AP
+      Conductivity (iso): 1.0
+      Stimulus: Istim {
+         Amplitude: 10.0
+         Start time: 0.0
+         Duration: 10.0
+      }
+      ODE solver: Euler
+   }
+
+   Output: Spatial {
+      Action_potential: t
+   }
+
+   LS type: GMRES
+   {
+      Max iterations:      100
+      Tolerance:           1D-6
+      Krylov space dimension: 50
+   }
+}
+

@@ -1,0 +1,194 @@
+#----------------------------------------------------------------
+# General simulation parameters
+
+Continue previous simulation: 0
+Number of spatial dimensions: 2
+Number of time steps: 300
+Time step size: 1e-2
+Spectral radius of infinite time step: 0.50
+Searched file name to trigger stop: STOP_SIM
+
+Save results to VTK format: 1
+Name prefix of saved VTK files: result
+Increment in saving VTK files: 1
+Start saving after time step: 1
+
+Increment in saving restart files: 10
+Convert BIN to VTK format: 0
+
+Verbose: 1
+Warning: 0
+Debug: 0
+
+#----------------------------------------------------------------
+# Mesh data
+Add mesh: lumen {
+   Mesh file path: mesh/channel/mesh-complete.mesh.vtu
+   Add face: inlet {
+      Face file path: mesh/channel/mesh-surfaces/inlet.vtp
+   }
+   Add face: outlet {
+      Face file path: mesh/channel/mesh-surfaces/outlet.vtp
+   }
+   Add face: top_wall {
+      Face file path: mesh/channel/mesh-surfaces/top_wall.vtp
+   }
+   Add face: bottom_wall {
+      Face file path: mesh/channel/mesh-surfaces/bottom_wall.vtp
+   }
+   Add face: top_leaflet {
+      Face file path: mesh/channel/mesh-surfaces/top_leaflet.vtp
+   }
+   Add face: bottom_leaflet {
+      Face file path: mesh/channel/mesh-surfaces/bottom_leaflet.vtp
+   }
+   Domain: 0
+}
+
+Add mesh: leaflets {
+   Mesh file path: mesh/leaflets/mesh-complete.mesh.vtu
+   Add face: top_leaflet_wall {
+      Face file path: mesh/leaflets/mesh-surfaces/top_leaflet_wall.vtp
+   }
+   Add face: bottom_leaflet_wall {
+      Face file path: mesh/leaflets/mesh-surfaces/bottom_leaflet_wall.vtp
+   }
+   Add face: top_leaflet_int {
+      Face file path: mesh/leaflets/mesh-surfaces/top_leaflet_int.vtp
+   }
+   Add face: bottom_leaflet_int {
+      Face file path: mesh/leaflets/mesh-surfaces/bottom_leaflet_int.vtp
+   }
+   Domain: 1
+}
+
+#----------------------------------------------------------------
+# Projections
+Add projection: top_leaflet_int {
+   Project from face: top_leaflet
+}
+Add projection: bottom_leaflet_int {
+   Project from face: bottom_leaflet
+}
+
+#----------------------------------------------------------------
+# Equations
+Add equation: FSI {
+   Coupled: 1
+   Min iterations: 3
+   Max iterations: 10
+   Tolerance: 1e-6
+
+   Domain: 0 {
+      Equation: fluid
+      Density: 100.0
+      Viscosity: Constant {Value: 10.0}
+      Backflow stabilization coefficient: 0.3
+   }
+
+   Domain: 1 {
+      Equation: struct  #vms_struct
+      Constitutive model: stVK
+      Density: 100.0
+      Elasticity modulus: 5.6e7
+      Poisson ratio: 0.4
+
+      ##### For vms_struct Eq.
+      ## Momentum stabilization coefficient: 0.001
+      ## Continuity stabilization coefficient: 0.0
+   }
+
+   LS type: GMRES {
+      Preconditioner: Trilinos-ILUT
+      Tolerance: 1e-6
+      Max iterations: 100
+      Krylov space dimension: 50
+   }
+
+   Output: Spatial {
+      Displacement: t
+      Velocity: t
+      Pressure: t
+      Vorticity: t
+   }
+
+   Output: Alias {
+      Displacement: FS_Displacement
+   }
+
+   Add BC: inlet {
+      Type: Dir
+      Time dependence: Unsteady
+      Temporal values file path: inflow.dat
+      Profile: Parabolic
+   }
+
+   Add BC: top_wall {
+      Type: Dir
+      Value: 0.0
+   }
+
+   Add BC: bottom_wall {
+      Type: Dir
+      Value: 0.0
+   }
+
+   Add BC: top_leaflet_wall {
+      Type: Dir
+      Value: 0.0
+      Impose on state variable integral: t
+   }
+
+   Add BC: bottom_leaflet_wall {
+      Type: Dir
+      Value: 0.0
+      Impose on state variable integral: t
+   }
+}
+
+Add equation: mesh {
+   Coupled: 1
+   Min iterations: 1
+   Max iterations: 5
+   Tolerance: 1e-4
+   Poisson ratio: 0.3
+
+   LS type: CG {
+      Tolerance: 1e-4
+   }
+
+   Output: Spatial {
+      Displacement: t
+   }
+
+   Add BC: inlet {
+      Type: Dir
+      Value: 0.0
+   }
+
+   Add BC:outlet {
+      Type: Dir
+      Value: 0.0
+   }
+
+   Add BC: top_wall {
+      Type: Dir
+      Value: 0.0
+   }
+
+   Add BC: bottom_wall {
+      Type: Dir
+      Value: 0.0
+   }
+
+   Add BC: top_leaflet_wall {
+      Type: Dir
+      Value: 0.0
+   }
+
+   Add BC: bottom_leaflet_wall {
+      Type: Dir
+      Value: 0.0
+   }
+}
+

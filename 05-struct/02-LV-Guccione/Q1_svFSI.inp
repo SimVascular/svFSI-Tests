@@ -1,0 +1,89 @@
+#----------------------------------------------------------------
+# General simulation parameters
+
+Continue previous simulation: 0
+Number of spatial dimensions: 3
+Number of time steps: 100
+Time step size: 0.01
+Spectral radius of infinite time step: 0.50
+Searched file name to trigger stop: STOP_SIM
+
+Save results to VTK format: 1
+Name prefix of saved VTK files: result
+Increment in saving VTK files: 1
+Start saving after time step: 1
+
+Increment in saving restart files: 100
+Convert BIN to VTK format: 0
+
+Verbose: 1
+Warning: 1
+Debug: 0
+
+#----------------------------------------------------------------
+# Mesh data
+Add mesh: msh {
+   Mesh file path:    mesh/Q1/mesh-complete.mesh.vtu
+   Add face: endo {
+      Face file path: mesh/Q1/mesh-surfaces/endo.vtp
+   }
+   Add face: epi {
+      Face file path: mesh/Q1/mesh-surfaces/epi.vtp
+   }
+   Add face: base {
+      Face file path: mesh/Q1/mesh-surfaces/base.vtp
+   }
+   Fiber direction: (1.0, 0.0, 0.0)
+   Fiber direction: (0.0, 1.0, 0.0)
+}
+
+#----------------------------------------------------------------
+# Equations
+Add equation: struct {
+   Coupled: 1
+   Min iterations: 4
+   Max iterations: 10
+   Tolerance: 1e-6
+
+   Constitutive model: Gucci {
+      C:   1.0e4
+      bf:  1.0
+      bt:  1.0
+      bfs: 1.0
+   }
+
+   Density: 1e-3
+   Elasticity modulus: 1.0
+
+   Poisson ratio: 0.5
+   Dilational penalty model: ST91
+   Penalty parameter: 1.0E6
+
+   Output: Spatial {
+      Displacement: t
+      Velocity: t
+      Jacobian: t
+   }
+
+   LS type: BICG
+   {
+      Preconditioner:      FSILS
+      Tolerance:           1D-6
+      Max iterations:      1000
+      #Krylov space dimension: 50
+   }
+
+   Add BC: base {
+      Type: Dir
+      Value: 0.0
+   }
+
+   Add BC: endo {
+      Type: Neu
+      Time dependence: Unsteady
+      Temporal values file path: load.dat
+      Ramp function: t
+      Follower pressure load: t
+   }
+}
+

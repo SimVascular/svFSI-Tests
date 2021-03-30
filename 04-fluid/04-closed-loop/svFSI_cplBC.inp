@@ -1,0 +1,243 @@
+#----------------------------------------------------------------
+# General simulation parameters
+
+Continue previous simulation: 0
+Number of spatial dimensions: 3
+Number of time steps: 2000
+Time step size: 5e-4
+Spectral radius of infinite time step: 0.50
+Searched file name to trigger stop: STOP_SIM
+
+Save results to VTK format: 1
+Name prefix of saved VTK files: result
+Increment in saving VTK files: 50
+Start saving after time step: 1
+
+Increment in saving restart files: 10
+Convert BIN to VTK format: 0
+
+Verbose: 1
+Warning: 0
+Debug: 0
+
+#----------------------------------------------------------------
+# Mesh data
+Add mesh: msh {
+   Mesh file path:    mesh/mesh-complete.mesh.vtu
+   Add face: inlet {
+      Face file path: mesh/mesh-surfaces/inlet.vtp
+   }
+   Add face: outlet_1 {
+      Face file path: mesh/mesh-surfaces/outlet_1.vtp
+   }
+   Add face: outlet_2 {
+      Face file path: mesh/mesh-surfaces/outlet_2.vtp
+   }
+   Add face: outlet_3 {
+      Face file path: mesh/mesh-surfaces/outlet_3.vtp
+   }
+   Add face: outlet_4 {
+      Face file path: mesh/mesh-surfaces/outlet_4.vtp
+   }
+   Add face: outlet_5 {
+      Face file path: mesh/mesh-surfaces/outlet_5.vtp
+   }
+   Add face: outlet_6 {
+      Face file path: mesh/mesh-surfaces/outlet_6.vtp
+   }
+   Add face: outlet_7 {
+      Face file path: mesh/mesh-surfaces/outlet_7.vtp
+   }
+   Add face: outlet_8 {
+      Face file path: mesh/mesh-surfaces/outlet_8.vtp
+   }
+   Add face: outlet_9 {
+      Face file path: mesh/mesh-surfaces/outlet_9.vtp
+   }
+   Add face: outlet_10 {
+      Face file path: mesh/mesh-surfaces/outlet_10.vtp
+   }
+   Add face: outlet_11 {
+      Face file path: mesh/mesh-surfaces/outlet_11.vtp
+   }
+   Add face: outlet_12 {
+      Face file path: mesh/mesh-surfaces/outlet_12.vtp
+   }
+   Add face: outlet_13 {
+      Face file path: mesh/mesh-surfaces/outlet_13.vtp
+   }
+   Add face: outlet_14 {
+      Face file path: mesh/mesh-surfaces/outlet_14.vtp
+   }
+   Add face: outlet_15 {
+      Face file path: mesh/mesh-surfaces/outlet_15.vtp
+   }
+   Add face: outlet_16 {
+      Face file path: mesh/mesh-surfaces/outlet_16.vtp
+   }
+   Add face: outlet_17 {
+      Face file path: mesh/mesh-surfaces/outlet_17.vtp
+   }
+   Add face: outlet_18 {
+      Face file path: mesh/mesh-surfaces/outlet_18.vtp
+   }
+   Add face: outlet_19 {
+      Face file path: mesh/mesh-surfaces/outlet_19.vtp
+   }
+   Add face: outlet_20 {
+      Face file path: mesh/mesh-surfaces/outlet_20.vtp
+   }
+   Add face: wall {
+      Face file path: mesh/mesh-surfaces/wall.vtp
+   }
+}
+
+#----------------------------------------------------------------
+# Equations
+Add equation: fluid {
+   Coupled: 1
+   Min iterations: 3
+   Max iterations: 10
+   Tolerance: 1e-4
+   Backflow stabilization coefficient: 0.2
+
+   Density: 1.06e-3
+   Viscosity: Constant {Value: 4.0e-3}
+
+   Output: Spatial {
+      Velocity: t
+      Pressure: t
+      Traction: t
+      WSS: t
+   }
+
+   LS type: NS
+   {
+      Max iterations:      10
+      NS-GM max iterations: 3
+      NS-CG max iterations: 500
+      Tolerance:           1D-4
+      NS-GM tolerance:     1D-4
+      NS-CG tolerance:     1D-4
+      Krylov space dimension: 50
+   }
+
+   Couple to cplBC: SI {
+      Number of unknowns: 39
+      0D code file path: cplBC/cplBC.exe
+      Unknowns initialization file path: cplBC/foo.ini
+      File name for 0D-3D communication: CPLBC_0D_3D.tmp
+      File name for saving unknowns: cplBC_AllData
+      Number of user-defined outputs: 31
+   }
+
+   Add BC: outlet_1 {
+      Type: Neu
+      Time dependence: Coupled
+   }
+
+   Add BC: outlet_2 {
+      Type: Neu
+      Time dependence: Coupled
+   }
+
+   Add BC: outlet_3 {
+      Type: Neu
+      Time dependence: Coupled
+   }
+
+   Add BC: outlet_4 {
+      Type: Neu
+      Time dependence: Coupled
+   }
+
+   Add BC: outlet_5 {
+      Type: Neu
+      Time dependence: Coupled
+   }
+
+   Add BC: outlet_6 {
+      Type: Neu
+      Time dependence: Coupled
+   }
+
+   Add BC: outlet_7 {
+      Type: Neu
+      Time dependence: Coupled
+   }
+
+   Add BC: outlet_8 {
+      Type: Neu
+      Time dependence: Coupled
+   }
+
+   Add BC: outlet_9 {
+      Type: Neu
+      Time dependence: Coupled
+   }
+
+   Add BC: outlet_10 {
+      Type: Neu
+      Time dependence: Coupled
+   }
+
+   Add BC: outlet_11 {
+      Type: Neu
+      Time dependence: Coupled
+   }
+
+   Add BC: outlet_12 {
+      Type: Neu
+      Time dependence: Coupled
+   }
+
+   Add BC: outlet_13 {
+      Type: Neu
+      Time dependence: Coupled
+   }
+
+   Add BC: outlet_14 {
+      Type: Neu
+      Time dependence: Coupled
+   }
+
+   Add BC: outlet_15 {
+      Type: Neu
+      Time dependence: Coupled
+   }
+
+   Add BC: outlet_16 {
+      Type: Neu
+      Time dependence: Coupled
+   }
+
+   Add BC: outlet_17 {
+      Type: Neu
+      Time dependence: Coupled
+   }
+
+   Add BC: outlet_18 {
+      Type: Neu
+      Time dependence: Coupled
+   }
+
+   Add BC: outlet_19 {
+      Type: Neu
+      Time dependence: Coupled
+   }
+
+   Add BC: outlet_20 {
+      Type: Neu
+      Time dependence: Coupled
+   }
+
+   Add BC: inlet {
+      Type: Neu
+      Time dependence: Coupled
+   }
+
+   Add BC: wall {
+      Type: Dir
+      Value: 0.0
+   }
+}

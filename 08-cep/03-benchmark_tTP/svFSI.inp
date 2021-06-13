@@ -23,7 +23,7 @@ Debug: 0
 #----------------------------------------------------------------
 # Mesh data
 Add mesh: msh {
-   Mesh file path):    mesh/h0.1/mesh-complete.mesh.vtu
+   Mesh file path:    mesh/h0.1/mesh-complete.mesh.vtu
    Add face: X0 {
       Face file path: mesh/h0.1/mesh-surfaces/X0.vtp
    }
@@ -43,7 +43,12 @@ Add mesh: msh {
       Face file path: mesh/h0.1/mesh-surfaces/Z1.vtp
    }
    Fiber direction: (1, 0, 0)
-   Domain file path: mesh/h0.1/domain_info.dat
+
+   # Here we also need to supply a domain information to separate
+   # pacemaker cells and non-pacemaker cells. domain_info.dat
+   # is a plaintext file store the domain ID of each element.
+   # id == 1: non-pacemaker cells
+   # id == 2: pacemaker cells (recivies stimulus)   Domain file path: mesh/h0.1/domain_info.dat
 }
 
 #----------------------------------------------------------------
@@ -54,6 +59,7 @@ Add equation: CEP {
    Max iterations: 5
    Tolerance: 1e-6
 
+   # Here domain id == 1 are non-pacemaker cells
    Domain: 1 {
       Electrophysiology model: TTP
       Conductivity (iso): 0.012571
@@ -61,6 +67,7 @@ Add equation: CEP {
       ODE solver: RK
    }
 
+   # Here domain id == 2 are pacemaker cells
    Domain: 2 {
       Electrophysiology model: TTP
       Conductivity (iso): 0.012571

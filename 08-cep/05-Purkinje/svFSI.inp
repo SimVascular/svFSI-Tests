@@ -22,17 +22,49 @@ Debug: 0
 
 #----------------------------------------------------------------
 # Mesh data
+
+# Load Purkinje network for the left-ventricle
 Add mesh: pfib_LV {
+   # Purkinje network is loaded as a 1D fiber mesh
    Set mesh as fibers: t
+
    Mesh file path: mesh/pfib_LV.vtu
+
+   # We need to provide domains to specifiy properties for solving
+   # the equation. For e.g., fluid density and viscosity should be
+   # provided for fluid, material properties for solid, etc. For
+   # electrophysiology, we need to provide information on whether
+   # the individual cell is a pacemaker cell or a regular myocyte.
+   # This domain information needs to provided here. 
+
+   # The file below is an ASCII file with number of lines the same
+   # as the number of elements. Each line will idenfity the domain
+   # number.
    Domain file path: mesh/domain_pfib_LV.dat
+
+   # If there is only one uniform domain, a constant value may be
+   # provided as,
+   # # Domain: 0. 
+
+   # If there are many domains, a vtu file may also be provided
+   # with an element-based variable "DOMAIN_ID"
+   # # Domain file path: mesh/multiple-domains.vtu
+
+   # Scaling factor for the mesh
    Mesh scale factor: 10.0
 }
 
+# Load Purkinje network for the right-ventricle
 Add mesh: pfib_RV {
    Set mesh as fibers: t
    Mesh file path: mesh/pfib_RV.vtu
+
+   # The domain id's for the left and right ventricles need not
+   # be different if the domains' properties are same. However,
+   # we still need to provide a file as input as the number
+   # of elements of LV and RV are different.
    Domain file path: mesh/domain_pfib_RV.dat
+
    Mesh scale factor: 10.0
 }
 
@@ -40,22 +72,41 @@ Add mesh: pfib_RV {
 # Equations
 Add equation: CEP {
    Coupled: 1
+
+   # Parameters for the nonlinear (Newton) solver
    Min iterations: 1
    Max iterations: 3
    Tolerance: 1e-6
 
+   # Domain 1 consists of regular conducting myocytes
    Domain: 1 {
+      # We use tenTusscher-Panfilov model
       Electrophysiology model: TTP
+
       Myocardial zone: pfib
+
+      # Isotropic conductivity
       Conductivity (iso): 1.1
+
+      # Time integrator
       ODE solver: RK
    }
 
+   # Domain 2 comprises pacemaker cells which need
+   # information on external stimulus
    Domain: 2 {
+      # We use tenTusscher-Panfilov model
       Electrophysiology model: TTP
+
       Myocardial zone: pfib
+
+      # Isotropic conductivity
       Conductivity (iso): 1.1
+
+      # Time integrator
       ODE solver: RK
+
+      # Details of external stimulus
       Stimulus: Istim {
          Amplitude: -52.0
          Start time: 0.0
@@ -64,10 +115,12 @@ Add equation: CEP {
       }
    }
 
+   # Output variables for visualization
    Output: Spatial {
       Action_potential: t
    }
 
+   # Linear solver parameters
    LS type: GMRES
    {
       Max iterations:      100

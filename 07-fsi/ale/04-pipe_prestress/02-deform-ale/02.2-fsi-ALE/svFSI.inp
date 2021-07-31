@@ -1,0 +1,161 @@
+#----------------------------------------------------------------
+# General simulation parameters
+
+Continue previous simulation: 1
+Number of spatial dimensions: 3
+Number of time steps: 3000
+Time step size: 0.001
+Spectral radius of infinite time step: 0.50
+Searched file name to trigger stop: STOP_SIM
+
+Save results to VTK format: 1
+Name prefix of saved VTK files: result
+Increment in saving VTK files: 10
+Start saving after time step: 1
+
+Increment in saving restart files: 10
+Convert BIN to VTK format: 0
+
+Verbose: 1
+Warning: 0
+Debug: 0
+
+#----------------------------------------------------------------
+# Mesh data
+Add mesh: lumen {
+   Mesh file path:    ../../mesh/lumen_mesh-complete/mesh-complete.mesh.vtu
+   Add face: lumen_inlet {
+      Face file path: ../../mesh/lumen_mesh-complete/mesh-surfaces/lumen_inlet.vtp
+   }
+   Add face: lumen_outlet {
+      Face file path: ../../mesh/lumen_mesh-complete/mesh-surfaces/lumen_outlet.vtp
+   }
+   Add face: lumen_wall {
+      Face file path: ../../mesh/lumen_mesh-complete/mesh-surfaces/lumen_wall.vtp
+   }
+   Initial velocities file path: init/rigid_wall_flow.vtu
+   Initial pressures file path:  init/rigid_wall_flow.vtu
+   Domain: 1
+}
+
+Add mesh: wall {
+   Mesh file path:    ../../mesh/wall_mesh-complete/mesh-complete.mesh.vtu
+   Add face: wall_inlet {
+      Face file path: ../../mesh/wall_mesh-complete/mesh-surfaces/wall_inlet.vtp
+   }
+   Add face: wall_outlet {
+      Face file path: ../../mesh/wall_mesh-complete/mesh-surfaces/wall_outlet.vtp
+   }
+   Add face: wall_inner {
+      Face file path: ../../mesh/wall_mesh-complete/mesh-surfaces/wall_inner.vtp
+   }
+   Add face: wall_outer {
+      Face file path: ../../mesh/wall_mesh-complete/mesh-surfaces/wall_outer.vtp
+   }
+   Prestress file path: init/wall_prestress.vtu
+   Initial displacements file path: init/wall_prestress.vtu
+   Domain: 2
+}
+
+#----------------------------------------------------------------
+# Projections
+Add projection: wall_inner {
+   Project from face: lumen_wall
+   Projection tolerance: 1e-6
+}
+
+#----------------------------------------------------------------
+# Equations
+Add equation: FSI {
+   Coupled: 1
+   Min iterations: 3
+   Max iterations: 10
+   Tolerance: 1e-4
+
+   Domain: 1 {
+      Equation: fluid
+      Density: 1.06
+      Viscosity: Constant {Value: 0.04}
+      Backflow stabilization coefficient: 0.2
+   }
+
+   Domain: 2 {
+      Equation: struct
+      Density: 1.0
+      Poisson ratio: 0.49
+      Elasticity modulus: 4000000.0
+      Constitutive model: nHK
+      Dilational penalty model: Quad
+   }
+
+   Output: Spatial {
+      Velocity: t
+      Pressure: t
+      Displacement: t
+      WSS: t
+   }
+
+   LS type: GMRES
+   {
+      Preconditioner:     FSILS
+      Max iterations:      100
+      Tolerance:           1D-4
+      Krylov space dimension: 50
+   }
+
+   Initialize RCR from flow: t
+   Add BC: lumen_inlet {
+      Type: Dir
+      Time dependence: Unsteady
+      Temporal values file path: lumen_inlet.flow
+      Profile: Parabolic
+      Impose flux: t
+   }
+
+   Add BC: lumen_outlet {
+      Type: Neu
+      Time dependence: RCR
+      RCR values: (121.0, 1.5D-5, 1212.0)
+      Distal pressure: 0.0
+   }
+
+   Add BC: wall_inlet {
+      Type: Dir
+      Value: 0.0
+      Impose on state variable integral: t
+   }
+
+   Add BC: wall_outlet {
+      Type: Dir
+      Value: 0.0
+      Impose on state variable integral: t
+   }
+}
+
+
+Add equation: mesh {
+   Coupled: 1
+   Min iterations: 2
+   Max iterations: 5
+   Tolerance: 1e-4
+   Poisson ratio: 0.3
+
+   LS type: CG {
+      Preconditioner: FSILS
+      Tolerance: 1e-4
+   }
+
+   Output: Spatial {
+      Displacement: t
+   }
+
+   Add BC: lumen_inlet {
+      Type: Dir
+      Value: 0.0
+   }
+
+   Add BC: lumen_outlet {
+      Type: Dir
+      Value: 0.0
+   }
+}

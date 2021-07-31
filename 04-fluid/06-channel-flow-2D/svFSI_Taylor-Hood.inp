@@ -1,0 +1,83 @@
+#----------------------------------------------------------------
+# General simulation parameters
+
+Continue previous simulation: 0
+Number of spatial dimensions: 2
+Number of time steps: 100
+Time step size: 0.01
+Spectral radius of infinite time step: 0.50
+Searched file name to trigger stop: STOP_SIM
+
+Save results to VTK format: 1
+Name prefix of saved VTK files: result
+Increment in saving VTK files: 50
+Start saving after time step: 1
+
+Increment in saving restart files: 50
+Convert BIN to VTK format: 0
+
+Verbose: 1
+Warning: 0
+Debug: 0
+
+#----------------------------------------------------------------
+# Mesh data
+Add mesh: msh {
+   Mesh file path:    mesh_P2/mesh-complete.mesh.vtu
+   Add face: bottom {
+      Face file path: mesh_P2/mesh-surfaces/Y0.vtp
+   }
+   Add face: top {
+      Face file path: mesh_P2/mesh-surfaces/Y1.vtp
+   }
+   Add face: left {
+      Face file path: mesh_P2/mesh-surfaces/X0.vtp
+   }
+   Add face: right {
+      Face file path: mesh_P2/mesh-surfaces/X1.vtp
+   }
+}
+
+#----------------------------------------------------------------
+# Equations
+Add equation: fluid {
+   Coupled: 1
+   Min iterations: 1
+   Max iterations: 10
+   Tolerance: 1e-6
+   Use Taylor-Hood type basis: t
+
+   Viscosity: Constant {Value: 1.0}
+   Density: 1.0
+
+   LS type: BICG
+   {
+      Preconditioner:      RCS
+      Tolerance:           1D-6
+      Max iterations:      1000
+      #Krylov space dimension: 50
+   }
+
+   Add BC: left {
+      Type: Dir
+      Time dependence: Steady
+      Value: -2.0
+      Profile: Parabolic
+   }
+
+   Add BC: top {
+      Type: Dir
+      Time dependence: Steady
+      Value: 0.0
+      #Weakly applied: t
+      #Penalty parameter: 1000.0
+   }
+
+   Add BC: bottom {
+      Type: Dir
+      Time dependence: Steady
+      Value: 0.0
+      #Weakly applied: t
+      #Penalty parameter: 1000.0
+   }
+}

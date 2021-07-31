@@ -1,0 +1,108 @@
+#----------------------------------------------------------------
+# General simulation parameters
+
+Continue previous simulation: 0
+Number of spatial dimensions: 2
+Number of time steps: 10000
+Time step size: 1e-2
+Spectral radius of infinite time step: 0.50
+Searched file name to trigger stop: STOP_SIM
+
+Save results to VTK format: 1
+Name prefix of saved VTK files: result
+Increment in saving VTK files: 100
+Start saving after time step: 1
+
+Save results in folder: results_test_weak
+
+Increment in saving restart files: 1000
+Convert BIN to VTK format: 0
+
+Verbose: 1
+Warning: 0
+Debug: 0
+
+#----------------------------------------------------------------
+# Mesh data
+Add mesh: msh {
+   Mesh file path:    mesh/mesh-complete.mesh.vtu
+   Add face: inlet {
+      Face file path: mesh/mesh-surfaces/inlet.vtp
+   }
+   Add face: outlet {
+      Face file path: mesh/mesh-surfaces/outlet.vtp
+   }
+   Add face: top {
+      Face file path: mesh/mesh-surfaces/top.vtp
+   }
+   Add face: bottom {
+      Face file path: mesh/mesh-surfaces/bottom.vtp
+   }
+   Add face: cyl_wall {
+      Face file path: mesh/mesh-surfaces/wall.vtp
+   }
+}
+
+#----------------------------------------------------------------
+# Equations
+Add equation: fluid {
+   Coupled: 1
+   Min iterations: 3
+   Max iterations: 10
+   Tolerance: 1e-3
+   Backflow stabilization coefficient: 0.3
+
+   Density: 1.0
+   Viscosity: Constant {Value: 0.01}
+
+   Output: Spatial {
+      Pressure: t
+      Velocity: t
+      Vorticity: t
+   }
+
+   Output: Boundary_integral {
+      Pressure: t
+      WSS: t
+   }
+
+   LS type: BIPN
+   {
+      Max iterations:      10
+      NS-GM max iterations: 3
+      NS-CG max iterations: 500
+      Tolerance:           1D-3
+      NS-GM tolerance:     1D-3
+      NS-CG tolerance:     1D-3
+      Krylov space dimension: 50
+   }
+
+   Add BC: inlet {
+      Type: Dir
+      Value: -1.0
+      Profile: Flat
+      Zero out perimeter: f
+   }
+
+   Add BC: top {
+      Type: Dir
+      Value: 0.0
+      Effective direction: (0, 1)
+      Zero out perimeter: f
+   }
+
+   Add BC: bottom {
+      Type: Dir
+      Value: 0.0
+      Effective direction: (0, 1)
+      Zero out perimeter: f
+   }
+
+   Add BC: cyl_wall {
+      Type: Dir
+      Time dependence: Steady
+      Value: 0.0
+      Weakly applied: t
+      Penalty parameter: 1000.0
+   }
+}

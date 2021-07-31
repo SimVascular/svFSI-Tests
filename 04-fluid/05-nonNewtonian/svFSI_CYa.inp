@@ -82,7 +82,7 @@ Add equation: fluid {
 
    Add BC: lumen_outlet {
       Type: Neu
-      #Time dependence: Resistane #RCR
+      #Time dependence: Resistance #RCR
       Value: 0.0 #1225
       #RCR values: (121.0, 1.5D-5, 1212.0)
       #Distal pressure: 0.0

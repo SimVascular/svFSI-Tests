@@ -1,0 +1,91 @@
+#----------------------------------------------------------------
+# General simulation parameters
+
+Continue previous simulation: 0
+Number of spatial dimensions: 3
+Number of time steps: 200
+Time step size: 0.001
+Spectral radius of infinite time step: 0.50
+Searched file name to trigger stop: STOP_SIM
+
+Save results to VTK format: 1
+Name prefix of saved VTK files: result
+Increment in saving VTK files: 50
+Start saving after time step: 1
+
+Increment in saving restart files: 50
+Convert BIN to VTK format: 0
+
+Verbose: 1
+Warning: 0
+Debug: 0
+
+#----------------------------------------------------------------
+# Mesh data
+Add mesh: wall {
+   Mesh file path: ../../mesh/wall_mesh-complete/mesh-complete.mesh.vtu
+   Add face: wall_inlet {
+      Face file path: ../../mesh/wall_mesh-complete/mesh-surfaces/wall_inlet.vtp
+   }
+   Add face: wall_outlet {
+      Face file path: ../../mesh/wall_mesh-complete/mesh-surfaces/wall_outlet.vtp
+   }
+   Add face: wall_inner {
+      Face file path: ../../mesh/wall_mesh-complete/mesh-surfaces/wall_inner.vtp
+   }
+   Add face: wall_outer {
+      Face file path: ../../mesh/wall_mesh-complete/mesh-surfaces/wall_outer.vtp
+   }
+}
+
+#----------------------------------------------------------------
+# Equations
+Add equation: struct {
+   Coupled: 1
+   Min iterations: 3
+   Max iterations: 10
+   Tolerance: 1e-6
+
+   Prestress: t
+
+   Density: 1.0
+   Poisson ratio: 0.49
+   Elasticity modulus: 4000000.0
+   Constitutive model: nHK
+   Dilational penalty model: Quad
+
+   Output: Spatial {
+      Stress: t
+      Displacement: t
+   }
+
+   LS type: GMRES
+   {
+      Preconditioner:      FSILS
+      Max iterations:      50
+      Tolerance:           1D-4
+      Krylov space dimension: 50
+   }
+
+   Add BC: wall_inlet {
+      Type: Dir
+      Value: 0.0
+   }
+
+   Add BC: wall_outlet {
+      Type: Dir
+      Value: 0.0
+   }
+
+   Add BC: wall_inner {
+      Type: Neu
+      Time dependence: Spatial
+      Spatial values file path: rigid_wall_mean_pressure.vtp
+      Follower pressure load: f
+   }
+
+#   Add BC: wall_inner {
+#      Type: Trac
+#      Traction values file path: rigid_wall_mean_traction.vtp
+#   }
+}

@@ -69,6 +69,7 @@ Add equation: fluid {
       Type: Dir
       Time dependence: Unsteady
       Temporal values file path: lumen_inlet.flow
+      #Fourier coefficients file path: lumen_inlet.fcs
       Profile: Parabolic
       Impose flux: t
    }

@@ -1,0 +1,85 @@
+#----------------------------------------------------------------
+# General simulation parameters
+
+Continue previous simulation: 0
+Number of spatial dimensions: 3
+Number of time steps: 3000
+Time step size: 0.000441
+Spectral radius of infinite time step: 0.50
+Searched file name to trigger stop: STOP_SIM
+
+Save results to VTK format: 1
+Name prefix of saved VTK files: result
+Increment in saving VTK files: 25
+Start saving after time step: 1
+
+Increment in saving restart files: 250
+Convert BIN to VTK format: 0
+
+Verbose: 1
+Warning: 1
+Debug: 0
+
+#----------------------------------------------------------------
+# Mesh data
+Add mesh: msh {
+   Mesh file path: ../mesh/mesh-complete.mesh.vtu
+   Add face: wall {
+      Face file path: ../mesh/walls_combined.vtp
+   }
+   Add face: inflow {
+      Face file path: ../mesh/mesh-surfaces/inflow.vtp
+   }
+   Add face: outflow {
+      Face file path: ../mesh/mesh-surfaces/outflow.vtp
+   }
+}
+
+#----------------------------------------------------------------
+# Equations
+Add equation: fluid {
+   Coupled: 1
+   Min iterations: 4
+   Max iterations: 10
+   Tolerance: 0.001
+   Backflow stabilization coefficient: 0.25
+
+   Density: 1.06
+   Viscosity: Constant {Value: 0.04}
+
+   Output: Spatial {
+      Velocity: t
+      Pressure: t
+      Traction: t
+      WSS: t
+   }
+
+   LS type: NS
+   {
+      Max iterations:      10
+      NS-GM max iterations: 4
+      NS-CG max iterations: 400
+      Tolerance:           1D-2
+      NS-GM tolerance:     1D-2
+      NS-CG tolerance:     1D-2
+      Krylov space dimension: 50
+   }
+
+   Add BC: wall {
+      Type: Dir
+      Value: 0.0
+   }
+
+   Add BC: inflow {
+      Type: Dir
+      Time dependence: General
+      BCT file path: bct.vtp
+   }
+
+   Add BC: outflow {
+      Type: Neu
+      Time dependence: RCR
+      RCR values: "15.4751159, 0.023307, 30.5248841"
+      Distal pressure: 0.0
+   }
+}

@@ -48,7 +48,8 @@ Add mesh: msh {
    # pacemaker cells and non-pacemaker cells. domain_info.dat
    # is a plaintext file store the domain ID of each element.
    # id == 1: non-pacemaker cells
-   # id == 2: pacemaker cells (recivies stimulus)   Domain file path: mesh/h0.1/domain_info.dat
+   # id == 2: pacemaker cells (recivies stimulus)
+   Domain file path: mesh/h0.1/domain_info.dat
 }
 
 #----------------------------------------------------------------

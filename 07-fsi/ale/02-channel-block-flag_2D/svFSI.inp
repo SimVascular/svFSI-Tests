@@ -90,11 +90,11 @@ Add equation: FSI {
       ## Continuity stabilization coefficient: 0.0
    }
 
-   LS type: GMRES {
+   LS type: BICG {
       Preconditioner: Trilinos-ILUT
       Tolerance: 1e-6
       Max iterations: 100
-      Krylov space dimension: 50
+      #Krylov space dimension: 50
    }
 
    Output: Spatial {
@@ -153,6 +153,11 @@ Add equation: mesh {
 
    Output: Spatial {
       Displacement: t
+   }
+
+   Add BC: inlet {
+      Type: Dir
+      Value: 0.0
    }
 
    Add BC: outlet {

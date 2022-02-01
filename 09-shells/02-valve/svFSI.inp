@@ -1,0 +1,151 @@
+#----------------------------------------------------------------
+# General simulation parameters
+
+Continue previous simulation: 0
+Number of spatial dimensions: 3
+Number of time steps: 7600
+Time step size: 1e-4
+Spectral radius of infinite time step: 0.50
+Searched file name to trigger stop: STOP_SIM
+
+Save results to VTK format: 1
+Name prefix of saved VTK files: result
+Increment in saving VTK files: 10
+Start saving after time step: 1
+
+Increment in saving restart files: 100
+Convert BIN to VTK format: 0
+
+Verbose: 1
+Warning: 0
+Debug: 0
+
+#----------------------------------------------------------------
+# Mesh data
+Add mesh: LCC {
+   Set mesh as shell: t
+   Mesh file path:    ./mesh/PAT003_07_LCC.vtu
+   Add face: LCC_fixed_edge {
+      Face file path: ./mesh/mesh-surfaces/PAT003_07_LCC_edge1.vtp
+   }
+   Add face: LCC_free_edge {
+      Face file path: ./mesh/mesh-surfaces/PAT003_07_LCC_edge2.vtp
+   }
+   Mesh scale factor: 10.0  # convert to mm-scale
+}
+
+Add mesh: NCC {
+   Set mesh as shell: t
+   Mesh file path:    ./mesh/PAT003_07_NCC.vtu
+   Add face: NCC_fixed_edge {
+      Face file path: ./mesh/mesh-surfaces/PAT003_07_NCC_edge1.vtp
+   }
+   Add face: NCC_free_edge {
+      Face file path: ./mesh/mesh-surfaces/PAT003_07_NCC_edge2.vtp
+   }
+   Mesh scale factor: 10.0  # convert to mm-scale
+}
+
+Add mesh: RCC {
+   Set mesh as shell: t
+   Mesh file path:    ./mesh/PAT003_07_RCC.vtu
+   Add face: RCC_fixed_edge {
+      Face file path: ./mesh/mesh-surfaces/PAT003_07_RCC_edge1.vtp
+   }
+   Add face: RCC_free_edge {
+      Face file path: ./mesh/mesh-surfaces/PAT003_07_RCC_edge2.vtp
+   }
+   Mesh scale factor: 10.0  # convert to mm-scale
+}
+
+Contact model: penalty {
+   Penalty constant (k): 1.0e5
+   Desired separation (h): 0.05
+   Closest gap to activate penalty (c): 1.0
+   Min norm of face normals (alpha): 0.7
+}
+
+#----------------------------------------------------------------
+# Equations
+Add equation: shell {
+   Coupled: 1
+   Min iterations: 3
+   Max iterations: 10
+   Tolerance: 1e-6
+
+   Density: 1e-3
+   Mass damping: 2.0
+   Elasticity modulus: 1.0e6
+   Poisson ratio: 0.45
+   Shell thickness: 0.4
+
+   Output: Spatial {
+      Displacement: t
+   }
+
+   LS type: GMRES
+   {
+      Tolerance:           1e-6
+      Max iterations:      100
+      Krylov space dimension: 50
+   }
+
+   #-----------------------------------------
+   #  Apply trans-valvular pressure gradient
+   Add BF: LCC {
+      Type: Neu
+      Time dependence: unsteady
+      Temporal values file path: pbc.dat
+   }
+
+   Add BF: NCC {
+      Type: Neu
+      Time dependence: unsteady
+      Temporal values file path: pbc.dat
+   }
+
+   Add BF: RCC {
+      Type: Neu
+      Time dependence: unsteady
+      Temporal values file path: pbc.dat
+   }
+
+   #-----------------------------------------
+   #  Apply leaflet boundary conditions
+   Add BC: LCC_fixed_edge {
+      Type: Dir
+      Value: 0.0
+      CST shell BC type: Fixed
+   }
+
+   Add BC: NCC_fixed_edge {
+      Type: Dir
+      Value: 0.0
+      CST shell BC type: Fixed
+   }
+
+   Add BC: RCC_fixed_edge {
+      Type: Dir
+      Value: 0.0
+      CST shell BC type: Fixed
+   }
+
+   Add BC: LCC_free_edge {
+      Type: Neu
+      Value: 0.0
+      CST shell BC type: Free
+   }
+
+   Add BC: NCC_free_edge {
+      Type: Neu
+      Value: 0.0
+      CST shell BC type: Free
+   }
+
+   Add BC: RCC_free_edge {
+      Type: Neu
+      Value: 0.0
+      CST shell BC type: Free
+   }
+}
+

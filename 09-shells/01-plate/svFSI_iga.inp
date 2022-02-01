@@ -1,0 +1,88 @@
+#----------------------------------------------------------------
+# General simulation parameters
+
+Continue previous simulation: 0
+Number of spatial dimensions: 3
+Number of time steps: 1000
+Time step size: 0.1
+Spectral radius of infinite time step: 0.50
+Searched file name to trigger stop: STOP_SIM
+
+Save results to VTK format: 1
+Name prefix of saved VTK files: result
+Increment in saving VTK files: 10
+Start saving after time step: 1
+
+Increment in saving restart files: 500
+Convert BIN to VTK format: 0
+
+Verbose: 1
+Warning: 0
+Debug: 0
+
+#----------------------------------------------------------------
+# Mesh data
+Add mesh: msh {
+   Set mesh as shell: 1
+   NURBS data file path:  ./mesh/2Dsqr_NURBS_C1.msh
+   Set direction: 1 {
+      Number of knot insertion:  9
+      Inserted knots repetition: 1
+   }
+   Set direction: 2 {
+      Number of knot insertion:  9
+      Inserted knots repetition: 1
+   }
+}
+
+#----------------------------------------------------------------
+# Equations
+Add equation: shell {
+   Coupled: 1
+   Min iterations: 3
+   Max iterations: 10
+   Tolerance: 1e-6
+
+   Density: 0.0
+   Mass damping: 1.0
+   Elasticity modulus: 12.0
+   Poisson ratio: 0.0
+   Shell thickness: 1.0
+
+   Output: Spatial {
+      Displacement: t
+   }
+
+   LS type: GMRES
+   {
+      Tolerance:           1e-6
+      Max iterations:      100
+      Krylov space dimension: 50
+   }
+
+   Add BF: msh {
+      Type: Neu
+      Value: 0.04
+   }
+
+   Add BC: XN_msh {
+      Type: Dir
+      Value: 0.0
+   }
+
+   Add BC: XP_msh {
+      Type: Dir
+      Value: 0.0
+   }
+
+   Add BC: YN_msh {
+      Type: Dir
+      Value: 0.0
+   }
+
+   Add BC: YP_msh {
+      Type: Dir
+      Value: 0.0
+   }
+}
+

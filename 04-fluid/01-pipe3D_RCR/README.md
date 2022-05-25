@@ -1,7 +1,7 @@
 
 # **Problem Description**
 
-Solve fluid flow in a cylindrical tube with resistance or RCR boundary conditions at the outlet and unsteady flow at inlet.
+Solve fluid flow in a cylindrical tube with resistance or RCR boundary conditions at the outlet and unsteady flow at inlet. To read more on both boundary conditions, please refer to [SimVascular website](https://simvascular.github.io/docsFlowSolver.html#bcphysics).
 
 The input file `svFSI.inp` follows the master input file [`svFSI_master.inp`](./svFSI_master.inp) as a template. Some specific input options are discussed below:
 

@@ -21,3 +21,5 @@ A description of each example will be provided soon. Examples include:
 
 (8) cep: cardiac electrophysiology modeling
 
+(9) shells: simulates shell structures.  
+

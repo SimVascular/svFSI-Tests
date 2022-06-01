@@ -11,9 +11,17 @@ Carreau-Yasuda model is defined as
 
 Here
 
-![cy_parameter](https://latex.codecogs.com/svg.image?\\&space;\eta_\infty:&space;\text{Limiting&space;high&space;shear-rate&space;viscosity}\\&space;\eta_0:&space;\text{Limiting&space;low&space;shear-rate&space;viscosity}&space;\\&space;\lambda:&space;\text{Shear-rate&space;tensor&space;multiplier}&space;\\\dot{\gamma}:&space;\text{shear&space;rate}&space;\\a:&space;\text{Shear-rate&space;tensor&space;exponent}&space;\\n:&space;&space;\text{Power-law&space;index})
+![iamge1](https://latex.codecogs.com/svg.image?\eta_\infty:&space;\text{Limiting&space;high&space;shear-rate&space;viscosity})
 
+![iamge2](https://latex.codecogs.com/svg.image?\eta_0:&space;\text{Limiting&space;low&space;shear-rate&space;viscosity}&space;)
 
+![iamge3](https://latex.codecogs.com/svg.image?\lambda:&space;\text{Shear-rate&space;tensor&space;multiplier}&space;)
+
+![iamge4](https://latex.codecogs.com/svg.image?\dot{\gamma}:&space;\text{Shear&space;rate}&space;)
+
+![iamge5](https://latex.codecogs.com/svg.image?a:&space;\text{Shear-rate&space;tensor&space;exponent}&space;)
+
+![iamge6](https://latex.codecogs.com/svg.image?n:&space;&space;\text{Power-law&space;index})
 
 Casson model is defined as
 

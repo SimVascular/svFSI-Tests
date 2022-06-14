@@ -147,3 +147,6 @@ Here, the first and last one are the user defined outputs.
 
 In genBC, the initial conditions are specified in USER.f through variable `tZeroX`. Hence, user needs to recompile genBC every time it changes. In cplBC, the initial conditions are provided through an input file and is more convenient.
 
+## Advanced Usage
+This folder also contains a [patient-specific case](./patient-specific-closed-loop-case), in which more advanced usage of 3D-0D coupling is demonstrated.
+

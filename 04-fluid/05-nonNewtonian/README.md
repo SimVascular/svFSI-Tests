@@ -3,7 +3,9 @@
 
 Solve the 3D pipe flow problem with different viscosity models. Currently, `svFSI` supports three viscosity model: Newtonian, Carreau-Yasuda and Casson[1].
 
-<img src="./Compare_nonNewtonian_models.png" width="600">
+<p align="center">
+   <img src="./Compare_nonNewtonian_models.png" width="600">
+</p>
 
 Carreau-Yasuda model is defined as
 

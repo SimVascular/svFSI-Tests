@@ -3,9 +3,10 @@
 
 Solve 2D Stokes flow problem. In this example, the method of manufactured solution is used to demonstrate the accuracy of the software.
 
-![P1P1](./P1P1/l2norm/error_L2_P1P1_bfC0.png)
+<img src="./P1P1/l2norm/error_L2_P1P1_bfC0.png" width="600">
 
-![P1P1](./P2P1/l2norm/error_L2_P2P1.png)
+<img src="./P2P1/l2norm/error_L2_P2P1.png" width="600">
+
 
 The input file `svFSI.inp` follows the master input file [`svFSI_master.inp`](./svFSI_master.inp) as a template. Some specific input options are discussed below:
 

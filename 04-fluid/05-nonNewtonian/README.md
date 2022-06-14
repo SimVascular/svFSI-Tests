@@ -3,29 +3,29 @@
 
 Solve the 3D pipe flow problem with different viscosity models. Currently, `svFSI` supports three viscosity model: Newtonian, Carreau-Yasuda and Casson[1].
 
-![models](./Compare_nonNewtonian_models.png)
+<img src="./Compare_nonNewtonian_models.png" width="600">
 
 Carreau-Yasuda model is defined as
 
-![cy_model](https://latex.codecogs.com/svg.image?\eta=\eta_\infty&plus;(\eta_0-\eta_\infty)\left[&space;1&plus;\left(&space;\lambda&space;\dot{\gamma}&space;\right)^a&space;\right]^{\frac{n-1}{a}}&space;)
+![cy_model](https://latex.codecogs.com/png.image?\inline&space;\dpi{120}\bg{white}\eta=\eta_\infty&plus;(\eta_0-\eta_\infty)\left[&space;1&plus;\left(&space;\lambda&space;\dot{\gamma}&space;\right)^a&space;\right]^{\frac{n-1}{a}}&space;)
 
 Here
 
-![iamge1](https://latex.codecogs.com/svg.image?\eta_\infty:&space;\text{Limiting&space;high&space;shear-rate&space;viscosity})
+![iamge1](https://latex.codecogs.com/png.image?\inline&space;\dpi{120}\bg{white}\eta_\infty:&space;\text{Limiting&space;high&space;shear-rate&space;viscosity})
 
-![iamge2](https://latex.codecogs.com/svg.image?\eta_0:&space;\text{Limiting&space;low&space;shear-rate&space;viscosity}&space;)
+![iamge2](https://latex.codecogs.com/png.image?\inline&space;\dpi{120}\bg{white}\eta_0:&space;\text{Limiting&space;low&space;shear-rate&space;viscosity}&space;)
 
-![iamge3](https://latex.codecogs.com/svg.image?\lambda:&space;\text{Shear-rate&space;tensor&space;multiplier}&space;)
+![iamge3](https://latex.codecogs.com/png.image?\inline&space;\dpi{120}\bg{white}\lambda:&space;\text{Shear-rate&space;tensor&space;multiplier}&space;)
 
-![iamge4](https://latex.codecogs.com/svg.image?\dot{\gamma}:&space;\text{Shear&space;rate}&space;)
+![iamge4](https://latex.codecogs.com/png.image?\inline&space;\dpi{120}\bg{white}\dot{\gamma}:&space;\text{Shear&space;rate}&space;)
 
-![iamge5](https://latex.codecogs.com/svg.image?a:&space;\text{Shear-rate&space;tensor&space;exponent}&space;)
+![iamge5](https://latex.codecogs.com/png.image?\inline&space;\dpi{120}\bg{white}a:&space;\text{Shear-rate&space;tensor&space;exponent}&space;)
 
-![iamge6](https://latex.codecogs.com/svg.image?n:&space;&space;\text{Power-law&space;index})
+![iamge6](https://latex.codecogs.com/png.image?\inline&space;\dpi{120}\bg{white}n:&space;&space;\text{Power-law&space;index})
 
 Casson model is defined as
 
-![ca_model](https://latex.codecogs.com/svg.image?\eta&space;=&space;\frac{1}{\dot{\gamma}}\left[&space;k_0(c)&space;&plus;&space;k_1(c)\sqrt{\dot{\gamma}}&space;\right]^2)
+![ca_model](https://latex.codecogs.com/png.image?\inline&space;\dpi{120}\bg{white}\eta&space;=&space;\frac{1}{\dot{\gamma}}\left[&space;k_0(c)&space;&plus;&space;k_1(c)\sqrt{\dot{\gamma}}&space;\right]^2)
 
 Here, k0(c) and k1(c) are functions of the hematocrit c. For more information, please refer to Ref. [1].
 

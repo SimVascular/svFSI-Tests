@@ -66,11 +66,13 @@ Add equation: heatS {
 
    Add BC: left {
       Type: Dir
+      Time dependence: Steady
       Value: 10.0
+      Zero out perimeter: f
+
       #Time dependence: Unsteady
       #Temporal values file path: bc_left.dat
       #Ramp function: t
-      Zero out perimeter: f
    }
 
    Add BC: right {

@@ -65,26 +65,25 @@ Add equation: fluid {
       Krylov space dimension: 50
    }
 
+   Couple to cplBC: SI {
+      Number of unknowns: 2
+      0D code file path: cplBC/cplBC.exe
+      Unknowns initialization file path: cplBC/foo.ini
+      File name for 0D-3D communication: CPLBC_0D_3D.tmp
+      File name for saving unknowns: cplBC_AllData
+      Number of user-defined outputs: 2
+   }
+
    Add BC: lumen_inlet {
       Type: Dir
-      Time dependence: Unsteady
-      Temporal values file path: lumen_inlet.flow
-      #Fourier coefficients file path: lumen_inlet.fcs
-      Profile: Parabolic
+      Time dependence: Coupled
       Impose flux: t
+      Zero out perimeter: t
    }
 
    Add BC: lumen_outlet {
       Type: Neu
-
-      ## Resistance BC
-      #Time dependence: Resistance #RCR
-      #Value: 1225
-
-      ## RCR BC
-      Time dependence: RCR
-      RCR values: (121.0, 1.5D-4, 1212.0)
-      Distal pressure: 0.0
+      Time dependence: Coupled
    }
 
    Add BC: lumen_wall {

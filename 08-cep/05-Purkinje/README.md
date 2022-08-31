@@ -1,7 +1,7 @@
 
 # **Problem Description**
 
-Simulate electric signal propagation inside the Purkinje network. 
+Simulate electric signal propagation inside the Purkinje network.
 
 <p align="center">
    <img src="./activation_10fps.gif" width="600">
@@ -17,7 +17,7 @@ The ten-Tusscher-Panfilov model is used to describe the cell activation. For det
 > ventricular tissue model. American Journal of Physiology-Heart and Circulatory Physiology,
 > 291(3):H1088–H1100, sep 2006.
 
-The input file `svFSI.inp` follows the master input file [`svFSI_master.inp`](./svFSI_master.inp) as a template. More on Purkinje simulation can be found here:
+The input file `svFSI.inp` follows the master input file [`svFSI_master.inp`](./svFSI_master.inp) as a template. More on Purkinje network generation and simulation can be found here:
 
 - SimVascular Website: https://simvascular.github.io/docsSimCardio.html#purkinje
 - Youtube Tutorial: https://www.youtube.com/watch?v=TCK3SmGwBa8&ab_channel=SimVascular

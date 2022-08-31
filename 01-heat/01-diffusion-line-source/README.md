@@ -1,7 +1,7 @@
 
 # **Problem Description**
 
-Solve heat transfer problem inside a 2D plate. A line source is specified on the left boundary, and zero temperature is prescribed on the right boundary. Adiabatic boundary condition is employed on top and bottom boundaries. The result shows a linear distribution of temperature.
+Solve heat transfer problem inside a 2D plate. A steady, uniform temperature value is specified on the left boundary, and zero temperature is prescribed on the right boundary. An option to provide unsteady temperature profile on the left boundary is also available. Adiabatic boundary conditions (zero heat flux) are employed on top and bottom boundaries. The result shows a linear distribution of temperature.
 
 <p align="center">
    <img src="./plot-temp-flux.png" width="1000">
@@ -22,7 +22,7 @@ If a line source with constant temperature is specified on the left boundary, th
    }
 ```
 
-Here, `Zero out perimeter` is only effective when used alongside Dirichlet BC. When set to `true`, this setting will enforce the temperature on top-left and bottom-left coroners to be zero.
+Here, `Zero out perimeter` is only effective when used alongside Dirichlet BC. When set to `true`, this setting will enforce the temperature on top-left and bottom-left corners to be zero.
 
 ## Unsteady Dirichlet BC
 
@@ -44,4 +44,4 @@ Once the ramp function is activated, the software will look for a user-specified
 <Line 3> 1.0  10.0   # time_point_2     data_value_2
 ```
 
-When ramp function is used, the software will linearly increase the boundary value from `data_value_1` to `data_value_2`  between `time_point_1` and `time_point_2`. After `time_point_2`, the boundary value will remain `data_value_2`.
+When ramp function is used, the software will linearly increase the boundary value from `data_value_1` to `data_value_2`  between `time_point_1` and `time_point_2`. After `time_point_2`, the boundary value will remain constant at `data_value_2`.

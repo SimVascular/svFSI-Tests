@@ -1,9 +1,17 @@
 
 # **Problem Description**
 
-Solve passive inflation of an idealized left-ventricular model. The problem set-up can be found in Problem 3 of the following publication:
+Solve active contraction of an idealized left-ventricular model. The problem set-up can be found in Problem 3 of Ref [1]  and is also shown in the following figure.
 
-> Land, Sander, Viatcheslav Gurev, Sander Arens, Christoph M. Augustin, Lukas Baron, Robert Blake, Chris Bradley, et al.  Verification of Cardiac Mechanics Software: Benchmark Problems and Solutions for Testing Active and Passive Material Behaviour.  *Proceedings of the Royal Society A: Mathematical, Physical and Engineering Sciences* 471, no. 2184 (December 2015): 20150641. https://doi.org/10.1098/rspa.2015.0641.
+<p align="center">
+   <img src="./configuration.png" width="1000">
+</p>
+
+The following plot shows the undeformed and deformed LV model.
+
+<p align="center">
+   <img src="./result.png" width="1000">
+</p>
 
 The input file `svFSI.inp` follows the master input file [`svFSI_master.inp`](./svFSI_master.inp) as a template. Some specific input options are discussed below:
 
@@ -30,3 +38,7 @@ The active contraction of the idealized LV is modeled through active stress, whi
 ```
 
 More on the ramp function, please refer to [01-heat/01-diffusion-line-source](../../01-heat/01-diffusion-line-source/README.md).
+
+## Reference
+
+1. Land, Sander, Viatcheslav Gurev, Sander Arens, Christoph M. Augustin, Lukas Baron, Robert Blake, Chris Bradley, et al.  Verification of Cardiac Mechanics Software: Benchmark Problems and Solutions for Testing Active and Passive Material Behaviour.  *Proceedings of the Royal Society A: Mathematical, Physical and Engineering Sciences* 471, no. 2184 (December 2015): 20150641. https://doi.org/10.1098/rspa.2015.0641.

@@ -3,7 +3,7 @@
 
 Continue previous simulation: 0
 Number of spatial dimensions: 3
-Number of time steps: 200
+Number of time steps: 1000
 Time step size: 0.001
 Spectral radius of infinite time step: 0.50
 Searched file name to trigger stop: STOP_SIM

@@ -1,7 +1,13 @@
 
 # **Problem Description**
 
-Simulate signal propagation inside the Purkinje network. The ten-Tusscher-Panfilov model is used to describe the cell activation. For more information regarding the model, please refer to the following publications:
+Simulate electric signal propagation inside the Purkinje network. 
+
+<p align="center">
+   <img src="./activation_10fps.gif" width="600">
+</p>
+
+The ten-Tusscher-Panfilov model is used to describe the cell activation. For details regarding the model, please refer to the following publications:
 
 > K. H. W. J. ten Tusscher, D. Noble, P. J. Noble, and A. V. Panfilov. A model for hu-
 > man ventricular tissue. American Journal of Physiology-Heart and Circulatory Physiology,

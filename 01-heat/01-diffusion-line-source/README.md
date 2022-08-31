@@ -1,7 +1,11 @@
 
 # **Problem Description**
 
-Solve heat transfer problem inside a 2D plate. A line source is specified on the left boundary, and zero temperature is prescribed on the right boundary. Adiabatic boundary condition is employed on top and bottom boundaries. 
+Solve heat transfer problem inside a 2D plate. A line source is specified on the left boundary, and zero temperature is prescribed on the right boundary. Adiabatic boundary condition is employed on top and bottom boundaries. The result shows a linear distribution of temperature.
+
+<p align="center">
+   <img src="./plot-temp-flux.png" width="1000">
+</p>
 
 The input file `svFSI.inp` follows the master input file [`svFSI_master.inp`](./svFSI_master.inp) as a template. Some specific input options are discussed below:
 

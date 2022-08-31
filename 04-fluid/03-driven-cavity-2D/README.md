@@ -1,7 +1,21 @@
 
 # **Problem Description**
 
-Solve the classic 2D driven cavity flow problem.
+Solve the classic 2D driven cavity flow problem. The flow field is plotted below.
+
+<p align="center">
+   <img src="./Re1000/N64_nonunif/Velocity_magnitude.png" width="600">
+</p>
+
+Current results also match well with [published results](./ref/LDC_Ghia.pdf).
+
+<p align="center">
+   <img src="./Re1000/N64_nonunif/u_y0.5.png" width="600">
+</p>
+
+<p align="center">
+   <img src="./Re1000/N64_nonunif/v_x0.5.png" width="600">
+</p>
 
 The input file `svFSI.inp` follows the master input file [`svFSI_master.inp`](./svFSI_master.inp) as a template. Some specific input options are discussed below:
 

@@ -29,7 +29,7 @@ Casson model is defined as
 
 ![ca_model](https://latex.codecogs.com/png.image?\inline&space;\dpi{120}\bg{white}\eta&space;=&space;\frac{1}{\dot{\gamma}}\left[&space;k_0(c)&space;&plus;&space;k_1(c)\sqrt{\dot{\gamma}}&space;\right]^2)
 
-Here, k0(c) and k1(c) are functions of the hematocrit c. For more information, please refer to Ref. [1].
+Here, $k_0(c)$ and $k_1(c)$ are functions of the hematocrit $c$. For more information, please refer to Ref. [1].
 
 The input file `svFSI.inp` follows the master input file [`svFSI_master.inp`](./svFSI_master.inp) as a template. Some specific input options are discussed below:
 

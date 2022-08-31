@@ -22,7 +22,7 @@ def getWallNodes(FileName):
 #----------------------------------------------------------------------
 def loadVTU(fileName):
 
-    print "   Loading vtu file   <---   %s" % (fileName)
+    print ("   Loading vtu file   <--- {:s}".format(fileName))
     vtuReader = vtk.vtkXMLUnstructuredGridReader()
     vtuReader.SetFileName(fileName)
     vtuReader.Update()
@@ -111,12 +111,12 @@ def writeSrfPressure(p, fout, fwall):
 #----------------------------------------------------------------------
 
 if __name__ == '__main__':
-    srcdir = "24-procs/vtuFiles"
+    srcdir = "24-procs/"
     nstart = 600
     nend   = 800
     nfreq  = 2
     dt     = 0.005
-    fwall  = "mesh-complete/walls_combined.vtp"
+    fwall  = "../mesh/lumen_mesh-complete/walls_combined.vtp"
 
     wall_ids = getWallNodes(fwall)
     wall_nno = np.size(wall_ids)
@@ -128,10 +128,10 @@ if __name__ == '__main__':
         ntime = nstart + i*nfreq
         time  = float(ntime)*dt
         if (ntime < 100):
-            fname = "%s/result_%03d.vtu" %(srcdir, ntime)
+            fname = "{:s}/result_{:03d}.vtu".format(srcdir, ntime)
         else:
-            fname = "%s/result_%d.vtu" %(srcdir, ntime)
-        print ("Reading file    <-----   %s") % (fname)
+            fname = "{:s}/result_{:d}.vtu".format(srcdir, ntime)
+        print ("Reading file    <----- {:s}".format(fname))
         vtuMesh = loadVTU(fname)
         mean_h = mean_h + getSurfaceData(vtuMesh, wall_ids, 'Traction')
         mean_P = mean_P + getSurfaceData(vtuMesh, wall_ids, 'Pressure')
@@ -139,10 +139,10 @@ if __name__ == '__main__':
     mean_h = mean_h / float(nframe)
     mean_P = mean_P / float(nframe)
     fout = 'rigid_wall_mean_traction.vtp'
-    print ("Writing traction file    ---->   %s") % (fout)
+    print ("Writing traction file    ----> {:s}".format(fout))
     writeSrfTraction(mean_h, fout, fwall)
     fout = 'rigid_wall_mean_pressure.vtp'
-    print ("Writing pressure file    ---->   %s") % (fout)
+    print ("Writing pressure file    ----> {:s}".format(fout))
     writeSrfPressure(mean_P, fout, fwall)
 
 #=======================================================================

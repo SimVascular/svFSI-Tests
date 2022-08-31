@@ -95,6 +95,10 @@ Add equation: FSI {
       WSS: t
    }
 
+   Output: Alias {
+      Displacement: FS_Displacement
+   }
+
    LS type: GMRES
    {
       Preconditioner:     FSILS

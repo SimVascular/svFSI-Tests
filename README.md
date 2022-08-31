@@ -44,7 +44,7 @@ A description of each example is provided within the folder. Examples include:
    4. **2Dspiral_BO**: simulate spiral wave in a plate using the Bueno-Orovio-Cherry-Fenton model 
    5. **Purkinje**: simulate signal propagation inside the Purkinje network using the ten-Tusscher-Panfilov model 
 
-9. shells: shell structures. 
+9. shells: shell structures. (This part of svFSI is still under active development.)
    1. **plate**: deformation of a 2D plate
    2. **valve**: opening and closing of aortic valve
 

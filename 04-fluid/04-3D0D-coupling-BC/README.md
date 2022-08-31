@@ -62,7 +62,7 @@ The input file for cplBC is more instructive than that of genBC. Many of the sam
    }
 ```
 
-`Number of unknowns` represents the total number of unknowns within the 0D system. It can be larger than the number of boundaries. `Unknowns initialization file path` specifies from which file to read the initial condition, and requires modification for your specific case. `Number of user-defined outputs` tells the solver to output certain amount of additional variables, which are defined in [cplBC/src/USER.f](./cplBC/src/USER.f).
+`Number of unknowns` represents the total number of unknowns within the 0D system. It can be larger than the number of boundaries. `Unknowns initialization file path` specifies from which file to read the initial condition, and requires modification for your specific case.  In this case, svFSI will read the quantities in foo.ini, and store them in variable `cplBC%xo`. This information is then written into `CPLBC_0D_3D.tmp` and is read in `cplBC/src/CPLBC.f/SUBROUTINE cplBC_Integ_X` as variable `X` . The order of componets in `X` should match that of `face`. `Number of user-defined outputs` tells the solver to output certain amount of additional variables, which are defined in [cplBC/src/USER.f](./cplBC/src/USER.f).
 
 ### cplBC USER.f
 

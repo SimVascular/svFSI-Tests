@@ -13,7 +13,7 @@ WALLS_FILE      = "../mesh/mesh-surfaces/walls_combined.vtp"
 #----------------------------------------------------------------------
 def loadVTU(fileName):
 
-    print "   Loading vtu file   <---   %s" % (fileName)
+    print ("   Loading vtu file   <---   {}".format(fileName))
     vtuReader = vtk.vtkXMLUnstructuredGridReader()
     vtuReader.SetFileName(fileName)
     vtuReader.Update()
@@ -154,7 +154,7 @@ if __name__ == '__main__':
             fname = "%s/result_%03d.vtu" %(srcdir, ntime)
         else:
             fname = "%s/result_%d.vtu" %(srcdir, ntime)
-        print ("Reading file    <-----   %s") % (fname)
+        print ("Reading file    <-----   {}".format(fname))
         vtuData  = loadVTU(fname)
         mean_P   = mean_P   + getSurfaceData(vtuData, wall_ids, 'Pressure')
         mean_H   = mean_H   + getSurfaceData(vtuData, wall_ids, 'Traction')
@@ -170,7 +170,7 @@ if __name__ == '__main__':
     vtpAddVectorArray(model, mean_WSS, "WSS")
 
     fout = 'avg_flow_rigid.vtp'
-    print ("Writing average flow file    ----->   %s") % (fout)
+    print ("Writing average flow file    ----->   {}".format(fout))
     vtpWriteToFile(model, fout)
 
 #=======================================================================

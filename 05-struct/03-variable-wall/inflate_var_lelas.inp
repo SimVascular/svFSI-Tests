@@ -1,0 +1,121 @@
+#----------------------------------------------------------------
+# General simulation parameters
+
+Continue previous simulation: 0
+Number of spatial dimensions: 3
+Number of time steps: 100
+Time step size: 0.1
+
+Save results to VTK format: 1
+Name prefix of saved VTK files: inflate
+Increment in saving VTK files: 1
+Start saving after time step: 1
+Save results in folder: var-lelas-results
+
+Increment in saving restart files: 1
+
+Verbose: 1
+Warning: 1
+Debug: 0
+
+#----------------------------------------------------------------
+# Mesh data
+Add mesh: msh {
+   Mesh file path:    mesh/mesh-complete.mesh.vtu
+   Fiber direction file path: mesh/mesh-complete.mesh.vtu
+   Add face: start {
+      Face file path: mesh/mesh-surfaces/start.vtp
+   }
+   Add face: end {
+      Face file path: mesh/mesh-surfaces/end.vtp
+   }
+   Add face: inside {
+      Face file path: mesh/mesh-surfaces/inside.vtp
+   }
+   Add face: outside {
+      Face file path: mesh/mesh-surfaces/outside.vtp
+   }
+   Number of variable wall properties: 3
+   Variable wall properties file path: mesh/varwallprops.vtu
+}
+
+#----------------------------------------------------------------
+# Equations
+Add equation: lElas {
+   Coupled: 1
+   Min iterations: 1
+   Max iterations: 20
+   Tolerance: 1e-7
+
+   Density: 1000.0
+
+   Output: Spatial {
+      Displacement: t
+      Velocity: t
+      Jacobian: t
+      Stress: t
+      Strain: t
+      Cauchy_stress: t
+      VonMises_stress: t
+
+   }
+
+
+   LS type: BICG
+   {
+      Preconditioner:      FSILS
+      Tolerance:           1D-6
+      Max iterations:      1000
+#      Krylov space dimension: 50
+   }
+
+   Add BC: start {
+      Type: Dir
+      Value: 0.0
+      Effective direction: (0, 0, 1)
+      Impose on state variable integral: t
+      Zero out perimeter: f
+   }
+
+   Add BC: end {
+      Type: Dir
+      Value: 0.0
+      Effective direction: (0, 0, 1)
+      Impose on state variable integral: t
+      Zero out perimeter: f
+   }
+
+   Add BC: inside {
+      Type: Dir
+      Value: 0.0
+      Effective direction: (0, 0, 1)
+      Impose on state variable integral: t
+      Zero out perimeter: f
+   }
+
+   Add BC: outside {
+      Type: Dir
+      Value: 0.0
+      Effective direction: (0, 0, 1)
+      Impose on state variable integral: t
+      Zero out perimeter: f
+   }
+
+   # step 1: pre-stressing
+   Add BC: inside {
+      Type: Neu
+      Time dependence: Unsteady
+      Temporal values file path: load_pre.dat
+      Ramp function: t
+   #   Follower pressure load: t
+   }
+
+   # step 2: g&r
+   #Add BC: inside {
+   #   Type: Neu
+   #   Time dependence: Unsteady
+   #   Temporal values file path: load_gr.dat
+   #   Ramp function: t
+   #   Follower pressure load: t
+   #}
+}

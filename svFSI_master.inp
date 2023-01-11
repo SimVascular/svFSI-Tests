@@ -325,6 +325,16 @@ Add mesh: mesh_name {
    #    Fiber direction file path: ./mesh/fibers_sheet.vtu
 
    #------------------------------------------------------------------
+   #  # Variable wall properties may be loaded for some material
+   #  # models. Properties must be stored at the nodal level with the
+   #  # data array name, "varWallProps", in the vtu format.
+   #    Variable wall properties file path: ./mesh/varwallprops.vtu
+
+   # # Currently implemented for LELAS and Neo-Hookean STRUCT models
+   # # where varWallProps(:,1) = Elastic modulus and varWallProps(:,2)
+   # # = Poisson ratio
+
+   #------------------------------------------------------------------
    #  Fiber mesh: If the loaded mesh is a one-dimensional network of
    #  fibers, then the keyword, "Set mesh as fibers" should be set.
    #  This setting is useful, for e.g., in loading the Purkinje network
